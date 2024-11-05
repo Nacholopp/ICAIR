@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+    <comment>This is easy!</comment>
+    <entry key="ddbb.connection">jdbc:postgresql://icair.cnyqe00ss6e8.eu-west-3.rds.amazonaws.com:5432/ICAIR_des</entry>
+    <entry key="ddbb.user">postgres</entry>
+    <entry key="ddbb.password">isw_icair</entry>
+    <entry key="host">127.0.0.1</entry>
+    <entry key="port">8081</entry>
+</properties>
+
