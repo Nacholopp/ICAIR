@@ -52,8 +52,11 @@ public class SocketServer extends Thread {
                     userControler = new UserControler();
                     // Registra al usuario enviado por cliente
                     userControler.regUser(mensajeIn.getUser());
-                    if (userControler.regUser(mensajeIn.getUser())) {
+                    if (userControler.regUser(mensajeIn.getUser())) {//Si esto es true devuelve /Usuario registrado
                         mensajeOut.setContext("/UsuarioRegistrado");
+                    }else{
+                        mensajeOut.setContext("/UsuarioNoRegistrado");
+                        System.out.println("Usuario no registrado");
                     }
                     objectOutputStream.writeObject(mensajeOut);
                     break;

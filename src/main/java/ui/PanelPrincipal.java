@@ -24,6 +24,7 @@ public class PanelPrincipal extends JPanel{
     public static final int numFilas=15;
     public static final int ancho=numColumnas*tam;
     public static final int alto=numFilas*tam;
+    public boolean viable = true;
     private Dimension d1=new Dimension(ancho,alto); //ME DECLARO YA UNA DIMENSION PARA QUE TODOS LOS PANELES TENGAN EL MISMO TAMAÑO
 
     List<String>allCountries=List.of("","Alemania", "Austria", "Bélgica", "Bulgaria", "Chipre", "Croacia", "Dinamarca", "Eslovaquia", "Eslovenia", "España", "Estonia", "Finlandia", "Francia", "Grecia",
@@ -916,13 +917,13 @@ public class PanelPrincipal extends JPanel{
                 String DNI= txtDNI_PantallaRegistro.getText().trim();
                 String Contraseña1= txtContraseña1_PantallaRegistro.getText().trim();
                 String Contraseña2= txtContraseña2_PantallaRegistro.getText().trim();
-
+                //PORQUE EL VALOR QUE COJE DE CORREO NO CAMBIA
                 //Voy a registrar un usuario
 
                 User usuario = new User(nombre, apellido1, apellido2, FechaNacimiento, Nacionalidad, CorreoElectronico, Contraseña1);
                 String context = "/regUser";
                 Client cliente = new Client();
-                cliente.sendMessage(context, usuario);
+                viable = true;
 
 
 
@@ -949,13 +950,7 @@ public class PanelPrincipal extends JPanel{
                         lblFechaNacimiento_PantallaRegistro.setForeground(Color.RED);
                     }
                     else{
-                        SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy");
-                        try {
-                            fechaNacimiento_PantallaRegistro = formatoFecha.parse(FechaNacimiento);
-                            lblFechaNacimiento_PantallaRegistro.setForeground(Color.BLACK);
-                        } catch (ParseException ex) {
-                            lblFechaNacimiento_PantallaRegistro.setForeground(Color.RED);
-                        }
+                        lblFechaNacimiento_PantallaRegistro.setForeground(Color.BLACK);
                     }
                     if(Nacionalidad.isEmpty()){
                         lblNacionalidad_PantallaRegistro.setForeground(Color.RED);
@@ -967,12 +962,7 @@ public class PanelPrincipal extends JPanel{
                         lblCorreoElectronico_PantallaRegistro.setForeground(Color.RED);
                     }
                     else{
-                        if (isValidEmail(CorreoElectronico)) {
-                            lblCorreoElectronico_PantallaRegistro.setForeground(Color.BLACK);
-                        } else {
-                            lblCorreoElectronico_PantallaRegistro.setForeground(Color.RED);
-                        }
-
+                        lblCorreoElectronico_PantallaRegistro.setForeground(Color.BLACK);
                     }
                     if(DNI.isEmpty()){
                         lblDNI_PantallaRegistro.setForeground(Color.RED);
@@ -994,6 +984,7 @@ public class PanelPrincipal extends JPanel{
                     }
                 }
                 else{
+                    viable = true;
                     lblNombre_PantallaRegistro.setForeground(Color.BLACK);
                     lblApellido1_PantallaRegistro.setForeground(Color.BLACK);
                     lblApellido2_PantallaRegistro.setForeground(Color.BLACK);
@@ -1003,21 +994,53 @@ public class PanelPrincipal extends JPanel{
                     lblDNI_PantallaRegistro.setForeground(Color.BLACK);
                     lblContraseña1_PantallaRegistro.setForeground(Color.BLACK);
                     lblContraseña2_PantallaRegistro.setForeground(Color.BLACK);
-                    if(Contraseña1.equals(Contraseña2)){
+
+                    if(!Contraseña1.equals(Contraseña2)){
                         lblContraseñasDistintas.setVisible(true);
                         lblUsuarioExistente.setVisible(false);
                         lblUsuarioRegistradoConExito.setVisible(false);
-                    }
-                    else{
+                        viable = false;
+                    }else{
                         lblContraseñasDistintas.setVisible(false);
                         lblUsuarioExistente.setVisible(false);
                         lblUsuarioRegistradoConExito.setVisible(true);
+                        viable = true;
                     }
+                    SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy");
+                        try {
+                            fechaNacimiento_PantallaRegistro = formatoFecha.parse(FechaNacimiento);
+                            lblFechaNacimiento_PantallaRegistro.setForeground(Color.BLACK);
+                            viable = true;
+                        } catch (ParseException ex) {
+                            lblFechaNacimiento_PantallaRegistro.setForeground(Color.RED);
+                            viable = false;
+                        }
+                    if (isValidEmail(CorreoElectronico)) {
+                        lblCorreoElectronico_PantallaRegistro.setForeground(Color.BLACK);
+                        viable = true;
+                    } else {
+                        lblCorreoElectronico_PantallaRegistro.setForeground(Color.RED);
+                        viable = false;
+                    }
+                    if(viable){
+                        if(!cliente.sendMessage(context, usuario)){
+                            JOptionPane.showMessageDialog(null, "EL CORREO "+usuario.getCorreoelectronico()+" YA ESTÁ REGISTRADO", "Aviso", JOptionPane.WARNING_MESSAGE);
+                        }else{
+                            cliente.sendMessage(context, usuario);
+                        }
+                    }
+
+
                 }
 
             }
         }
     }
+
+
+
+
+
     private class eventoBotonesPanelInicioSesion implements ActionListener{
         @Override
         public void actionPerformed(ActionEvent e) {

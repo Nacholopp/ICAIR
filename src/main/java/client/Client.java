@@ -43,6 +43,8 @@ public class Client {
             // Para registrar el contexto a enviar tiene que ser /regUser
             case "/UsuarioRegistrado":
                 return true;
+            case "/UsuarioNoRegistrado":
+                return false;
 
             case "/UsuarioLogeado":
                 return true;

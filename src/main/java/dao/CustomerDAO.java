@@ -1,9 +1,6 @@
 package dao;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 
 import domain.User;
@@ -36,18 +33,18 @@ public class CustomerDAO {
             if(user.getNumerotarjeta() != null){
                 pstmt.setString(8, user.getNumerotarjeta());
             }else{
-                pstmt.setNull(8, java.sql.Types.VARCHAR);
+                pstmt.setNull(8, Types.VARCHAR);
             }
             if(user.getFechacaducidadtarjeta() != null){
                 pstmt.setString(9, user.getFechacaducidadtarjeta());
             }else{
-                pstmt.setNull(9, java.sql.Types.VARCHAR);
+                pstmt.setNull(9, Types.VARCHAR);
             }
 
             if(user.getCvc() != null){
                 pstmt.setString(10, user.getCvc());
             }else{
-                pstmt.setNull(10, java.sql.Types.INTEGER);
+                pstmt.setNull(10, Types.INTEGER);
             }
 
             if (user.getPremium() != null) {
@@ -59,13 +56,23 @@ public class CustomerDAO {
                 pstmt.setInt(12, user.getPuntos());
             }else{
                 // Si el usuario que se registra no es premium o no tiene puntos se pone un null
-                pstmt.setObject(12,user.getPuntos(),java.sql.Types.INTEGER);
+                pstmt.setObject(12,user.getPuntos(), Types.INTEGER);
             }
 
 
             //UNA VEZ FUNCIONE IMPLEMENTAR QUE NO REGISTRE UN USUARIO YA REGISTRADO POR EL CORREO
 
+            ResultSet rs = pstmt.executeQuery();
+
+            while(rs.next()){ //Es un while para que recorra todos los guardados
+                String correoalmacenado = rs.getString("correoelectronico").trim();
+                if(correoalmacenado.equals(user.getCorreoelectronico())) {
+                    return false;
+                }
+            }
+
             pstmt.executeUpdate();
+
             return true;
         } catch (SQLException e) {
             e.printStackTrace();
