@@ -105,7 +105,7 @@ public class PanelPrincipal extends JPanel{
     private JTextField txtNumeroTarjeta_PantallaDatosBancarios, txtFechaCaducidad_PantallaDatosBancarios, txtCVC_PantallaDatosBancarios;
     private Date fechaCaducidadtarjeta_PantallaDatosBancarios;
     //endregion
-    //ELEMENTOS PANTALLA DATOS BANCARIOS INGRESADOS
+    //ELEMENTOS PANTALLA SUBSCRITO
     //region
 
 
@@ -900,28 +900,7 @@ public class PanelPrincipal extends JPanel{
         //endregion
         pnlAñadirDatosBancarios.setVisible(false);
 
-        //PANTALLA CON DATOS BANCARIOS ACTUALIZADOS
-        //region
-        JLabel lbltarjetaAñadida = new JLabel("TARJETA BANCARIA ACTUALIZADA", JLabel.CENTER);
-        lbltarjetaAñadida.setFont(new Font("Arial",Font.BOLD,30));
-        lbltarjetaAñadida.setBounds(3*tamOrig, 31*tamOrig, 50*tamOrig, 3*tamOrig);
-        lbltarjetaAñadida.setForeground(Color.BLUE);
-        lbltarjetaAñadida.setLocation(250,250);
-        pnlDatosBancariosAñadidos=new JPanel();
-        pnlDatosBancariosAñadidos.setBackground(Color.white);
-        pnlDatosBancariosAñadidos.setPreferredSize(d1);
-        pnlDatosBancariosAñadidos.setLayout(null);
 
-
-
-
-        pnlDatosBancariosAñadidos.add(lbltarjetaAñadida);
-
-
-
-        this.add(pnlDatosBancariosAñadidos);
-        //endregion
-        pnlDatosBancariosAñadidos.setVisible(false);
     }
 
     private class eventoBotonesPanelPrincipal implements ActionListener{
@@ -1339,12 +1318,27 @@ public class PanelPrincipal extends JPanel{
                 pnlAñadirDatosBancarios.setVisible(true);
             }
             if(e.getSource()==btnSuscribirse_PantallaOpciones){
-                //Cambie la base de datos
-                //Despues cambio lo del boton
+                Client cliente = new Client();
+                String contexto = "/setPremium";
+                if (usuarioIniciado.getNumerotarjeta() == null || usuarioIniciado.getFechacaducidadtarjeta() == null || usuarioIniciado.getCvc() == null) {
+                    usuarioIniciado.setPremium(false);
+
+
+
+                }else{
+                    usuarioIniciado.setPremium(true);
+                    boolean userPremium = cliente.sendMessage_User(contexto, usuarioIniciado);
+
+
+                }
             }
             if(e.getSource()==btnCancelarSuscripcion_PantallaOpciones){
-                //Cambiar base da datos
-                //Para subscribirse compprobar datos bancarios.
+                //Cambiar base de datos
+                Client cliente = new Client();
+                String contexto = "/setPremium";
+                usuarioIniciado.setPremium(false);
+                cliente.sendMessage_User(contexto, usuarioIniciado);
+                //Para cambiar los botones haría if(!user.getpremium()){aparecer boton subscribirse y una label de usuario no subscrito}
             }
         }
     }
@@ -1415,11 +1409,7 @@ public class PanelPrincipal extends JPanel{
                     if (!datosActualizados) {
                         JOptionPane.showMessageDialog(null, "No se han podido actualizar los datos bancarios, por favor inténtelo de nuevo");
                     }
-                    else {
-                        pnlAñadirDatosBancarios.setVisible(false);
-                        pnlDatosBancariosAñadidos.setVisible(true);
 
-                    }
                 }
             }
         }

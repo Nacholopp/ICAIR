@@ -58,6 +58,15 @@ public class Client {
             case "/DatosBancariosNoRegistrados":
                 return false;
 
+            case "/PremiumCorrecto":
+                return true;
+            case "/PremiumNoCorrecto":
+                return false;
+
+            case "/removePremiumCorrecto":
+                return true;
+            case "/removePremiumIncorrecto":
+                return false;
 
             default:
                 return false;

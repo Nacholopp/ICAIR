@@ -24,4 +24,10 @@ public class UserControler {
         return customerDAO.updateDatosBancarios(usuario);
     }
 
+    public boolean setPremium(User usuario){
+        return customerDAO.setUserPremium(usuario);
+    }
+
+
+
 }

@@ -4,9 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e426df70-abe8-4cb6-9367-dae538d61216" name="Changes" comment="Actualizar datos bancarios">
+    <list default="true" id="e426df70-abe8-4cb6-9367-dae538d61216" name="Changes" comment="Actualizar datos bancarios corregido y proceso de botones de subscripción">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Server/SocketServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Server/SocketServer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/client/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/client/Client.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/controler/UserControler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/controler/UserControler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/dao/CustomerDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dao/CustomerDAO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/ui/PanelPrincipal.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ui/PanelPrincipal.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -71,7 +74,7 @@
       <option name="presentableId" value="Default" />
       <updated>1731308530564</updated>
       <workItem from="1731308531576" duration="87000" />
-      <workItem from="1731308801560" duration="10618000" />
+      <workItem from="1731308801560" duration="13733000" />
     </task>
     <task id="LOCAL-00001" summary="Arreglos de Pedro">
       <option name="closed" value="true" />
@@ -97,7 +100,15 @@
       <option name="project" value="LOCAL" />
       <updated>1731317522374</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Actualizar datos bancarios corregido y proceso de botones de subscripción">
+      <option name="closed" value="true" />
+      <created>1731321018100</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1731321018100</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -117,7 +128,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Arreglos de Pedro" />
     <MESSAGE value="Actualizar datos bancarios" />
-    <option name="LAST_COMMIT_MESSAGE" value="Actualizar datos bancarios" />
+    <MESSAGE value="Actualizar datos bancarios corregido y proceso de botones de subscripción" />
+    <option name="LAST_COMMIT_MESSAGE" value="Actualizar datos bancarios corregido y proceso de botones de subscripción" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

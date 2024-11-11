@@ -145,6 +145,16 @@ public class SocketServer extends Thread {
                     objectOutputStream.writeObject(mensajeOut);
                     break;
 
+                case "/setPremium":
+                    userControler = new UserControler();
+                    boolean usuario_premium = userControler.setPremium(mensajeIn.getUser());
+                    if(usuario_premium){
+                        mensajeOut.setContext("/PremiumCorrecto");
+                    }else{
+                        mensajeOut.setContext("/PremiumIncorrecto");
+                    }
+                    objectOutputStream.writeObject(mensajeOut);
+                    break;
 
             }
             try {
