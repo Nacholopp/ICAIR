@@ -10,8 +10,12 @@ import java.net.Socket;
 
 import configuration.PropertiesISW;
 import controler.UserControler;
-import domain.User;
+import controler.AvionControler;
 import message.Message;
+import java.util.List;
+import domain.Avion;
+import domain.User;
+
 
 
 public class SocketServer extends Thread {
@@ -46,23 +50,88 @@ public class SocketServer extends Thread {
 
             // Creamos el UserControler para utilizar sus funciones
             UserControler userControler;
-
+            AvionControler avionControler;
             switch (mensajeIn.getContext()) {
                 case "/regUser":
                     userControler = new UserControler();
                     // Registra al usuario enviado por cliente
-                    userControler.regUser(mensajeIn.getUser());
-                    if (userControler.regUser(mensajeIn.getUser())) {//Si esto es true devuelve /Usuario registrado
+                    boolean registroExitoso = userControler.regUser(mensajeIn.getUser());
+                    if (registroExitoso) {
                         mensajeOut.setContext("/UsuarioRegistrado");
                     }else{
                         mensajeOut.setContext("/UsuarioNoRegistrado");
-                        System.out.println("Usuario no registrado");
                     }
                     objectOutputStream.writeObject(mensajeOut);
                     break;
+                case "/logUser":
+                    userControler = new UserControler();
+                    boolean loginExistoso=userControler.logUser(mensajeIn.getUser());
+                    if (loginExistoso) {
+                        mensajeOut.setContext("/UsuarioCorrecto");
+                    }else{
+                        mensajeOut.setContext("/UsuarioIncorrecto");
+                    }
+                    objectOutputStream.writeObject(mensajeOut);
+                    break;
+                case "/findAvion":
+                    avionControler = new AvionControler();
+                    boolean busquedaExistoso=avionControler.findAvion(mensajeIn.getAvion());
+                    if (busquedaExistoso) {
+                        mensajeOut.setContext("/AvionEncontrado");
+                    }else{
+                        mensajeOut.setContext("/AvionNoEncontrado");
+                    }
+                    objectOutputStream.writeObject(mensajeOut);
+                    break;
+                case "/findAvionID":
+                    avionControler = new AvionControler();
+                    boolean busquedaExistosoID=avionControler.findAvionID(mensajeIn.getAvion());
+                    if (busquedaExistosoID) {
+                        mensajeOut.setContext("/AvionEncontradoID");
+                    }else{
+                        mensajeOut.setContext("/AvionNoEncontradoID");
+                    }
+                    objectOutputStream.writeObject(mensajeOut);
+                    break;
+                case "/ListaVuelos":
+                    avionControler = new AvionControler();
+                    List<Avion> listaAviones = avionControler.buscarVuelos(mensajeIn.getAvion());
 
-                default:
-                    System.out.println("\nParámetro no encontrado");
+                    if (!listaAviones.isEmpty()) {
+                        mensajeOut.setContext("/ListaAviones");
+                        mensajeOut.setListaAviones(listaAviones);
+                    }
+                    else {
+                        mensajeOut.setContext("/NoHayAviones");
+                    }
+
+                    objectOutputStream.writeObject(mensajeOut);
+                    break;
+                case "/ListaVuelosID":
+                    avionControler = new AvionControler();
+                    List<Avion> listaAvionesID = avionControler.buscarVuelosID(mensajeIn.getAvion());
+                    if (!listaAvionesID.isEmpty()) {
+                        mensajeOut.setContext("/ListaAvionesID");
+                        mensajeOut.setListaAvionesID(listaAvionesID);
+                    }
+                    else {
+                        mensajeOut.setContext("/NoHayAvionesID");
+                    }
+
+                    objectOutputStream.writeObject(mensajeOut);
+                    break;
+                case "/getLoggedUser":
+                    userControler = new UserControler();
+                   User usuarioLogeado = userControler.buscarUsuarioLogeado(mensajeIn.getUser());
+                    if (usuarioLogeado != null) {
+                        mensajeOut.setContext("/UsuarioLogeado");
+                        mensajeOut.setUser(usuarioLogeado);
+                    }
+                    else {
+                        mensajeOut.setContext("/UsuarioNoLogeado");
+                    }
+
+                    objectOutputStream.writeObject(mensajeOut);
                     break;
             }
             try {

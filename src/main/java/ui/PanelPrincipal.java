@@ -3,11 +3,14 @@ package ui;
 
 import client.Client;
 import domain.User;
+import domain.Avion;
 
 import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
 import javax.imageio.ImageIO;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
 import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
@@ -15,6 +18,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.regex.Pattern;
+import javax.swing.table.*;
+import java.util.regex.*;
 
 public class PanelPrincipal extends JPanel{
     public static final int tamOrig=16; //ESTO ME AYUDA A TENER UNA FORMA DE ORDENAR TODOS LOS ELEMENTOS DEL JUEGO
@@ -24,33 +29,47 @@ public class PanelPrincipal extends JPanel{
     public static final int numFilas=15;
     public static final int ancho=numColumnas*tam;
     public static final int alto=numFilas*tam;
-    public boolean viable = true;
     private Dimension d1=new Dimension(ancho,alto); //ME DECLARO YA UNA DIMENSION PARA QUE TODOS LOS PANELES TENGAN EL MISMO TAMAÑO
 
     List<String>allCountries=List.of("","Alemania", "Austria", "Bélgica", "Bulgaria", "Chipre", "Croacia", "Dinamarca", "Eslovaquia", "Eslovenia", "España", "Estonia", "Finlandia", "Francia", "Grecia",
             "Hungría", "Irlanda", "Italia", "Letonia", "Lituania", "Luxemburgo", "Malta", "Países Bajos", "Polonia", "Portugal", "República Checa", "Rumania", "Suecia");
+    List<String> allCities = List.of("","Madrid", "Barcelona", "Chicago", "Paris", "Tokyo", "Miami");
     JPanel pnlPantallaInicial;
+    JPanel pnlMostrarBilletesInicio;
     JPanel pnlPantallaRegistro;
     JPanel pnlPantallaInicioSesion;
     JPanel pnlOpcionesSesionIniciada;
     JPanel pnlPantallaBusquedaBilletesSinPremium;
     JPanel pnlPantallaBusquedaBilletesConPremium; //FaltaPorImplementar
     JPanel pnlAñadirDatosBancarios;
-    JPanel pnlMostrarBilletesInicio;
     JPanel pnlMostrarBilletesSinPremium; //FaltaPorImplementar
     JPanel pnlMostrarBilletesConPremium; //FaltaPorImplementar
 
     //ELEMENTOS PANTALLA INICIAL
     //region
     private JButton btnRegistrarse_PantallaInicial, btnIniciarSesion_PantallaInicial, btnBuscarDatos_PantallaInicial, btnBuscarID_PantallaInicial;
-    private JTextField txtOrigen_PantallaInicial, txtDestino_PantallaInicial, txtFechaIda_PantallaInicial, txtFechaVuelta_PantallaInicial, txtIDIda_PantallaInicial, txtIDVuelta_PantallaInicial;
-    private JLabel lblOrigen_PantallaInicial, lblDestino_PantallaInicial, lblFechaIda_PantallaInicial, lblFechaVuelta_PantallaInicial, lblIDIda_PantallaInicial, lblIDVuelta_PantallaInicial, lblBusquedaDatos_PantallaInicial, lblBusquedaID_PantallaInicial, lblBuscarDatos_PantallaInicial, lblBuscarID_PantallaInicial;
+    private JTextField txtOrigen_PantallaInicial, txtDestino_PantallaInicial, txtFechaIda_PantallaInicial, txtIDIda_PantallaInicial;
+    private JLabel lblOrigen_PantallaInicial, lblDestino_PantallaInicial, lblFechaIda_PantallaInicial, lblIDIda_PantallaInicial, lblBusquedaDatos_PantallaInicial, lblBusquedaID_PantallaInicial;
+    private JLabel lblNoHayVuelosDisponibles_PantallaBilletesInicio, lblNoHayVuelosDisponiblesID_PantallaBilletesInicio;
+    private JComboBox<String> comboBoxCiudadesOrigen_PantallaInicial;
+    private JComboBox<String> comboBoxCiudadesDestino_PantallaInicial;
+    private DefaultComboBoxModel<String> comboBoxModelOrigen_PantallaInicial;
+    private DefaultComboBoxModel<String> comboBoxModelDestino_PantallaInicial;
+
+    //endregion
+    //ELEMENTOS PANTALLA DE BILLETES DISPONIBLES PANTALLA INICIAL
+    //region
+    private JButton btnVolverPantallaInicio_PantallaBilletesInicio;
+    private DefaultTableModel modelotablaVuelos_PantallaBilletesInicio;
+    private JTable  tablaVuelos_PantallaBilletesInicio;
+    private JScrollPane scrollPaneTabla_PantallaBilletesInicio;
+    private JPanel pnlSecundario_PantallaBilletesInicio;
     //endregion
     //ELEMENTOS PANTALLA REGISTRO
     //region
     private JButton btnRegistrarse_PantallaRegistro, btnVolverPantallaInicio_PantallaRegistro;
-    private JTextField txtNombre_PantallaRegistro, txtApellido1_PantallaRegistro, txtApellido2_PantallaRegistro, txtFechaNacimiento_PantallaRegistro, txtCorreoElectronico_PantallaRegistro, txtDNI_PantallaRegistro, txtContraseña1_PantallaRegistro, txtContraseña2_PantallaRegistro;
-    private JLabel lblNombre_PantallaRegistro, lblApellido1_PantallaRegistro, lblApellido2_PantallaRegistro, lblFechaNacimiento_PantallaRegistro, lblNacionalidad_PantallaRegistro, lblCorreoElectronico_PantallaRegistro, lblDNI_PantallaRegistro, lblContraseña1_PantallaRegistro, lblContraseña2_PantallaRegistro;
+    private JTextField txtNombre_PantallaRegistro, txtApellido1_PantallaRegistro, txtApellido2_PantallaRegistro, txtFechaNacimiento_PantallaRegistro, txtCorreoElectronico_PantallaRegistro, txtContraseña1_PantallaRegistro, txtContraseña2_PantallaRegistro;
+    private JLabel lblNombre_PantallaRegistro, lblApellido1_PantallaRegistro, lblApellido2_PantallaRegistro, lblFechaNacimiento_PantallaRegistro, lblNacionalidad_PantallaRegistro, lblCorreoElectronico_PantallaRegistro, lblContraseña1_PantallaRegistro, lblContraseña2_PantallaRegistro;
     private JLabel lblContraseñasDistintas,lblUsuarioExistente, lblUsuarioRegistradoConExito;
     private JComboBox<String> comboBoxNacionalidades_PantallaRegistro;
     private DefaultComboBoxModel<String> comboBoxModel_PantallaRegistro;
@@ -61,6 +80,7 @@ public class PanelPrincipal extends JPanel{
     private JLabel lblCorreElectronico_PantallaInicioSesion, lblContraseña_PantallaInicioSesion;
     private JTextField txtCorreoElectronico_PantallaInicioSesion, txtContraseña_PantallaInicioSesion;
     private JButton btnIniciarSesion_PantallaInicioSesion, btnVolverPantallaInicio_PantallaInicioSesion;
+    private JLabel lblLoginFallido_PantallaInicioSesion;
     //endregion
     //ELEMENTOS PANTALLA DE OPCIONES CUANDO SE HA INICIADO SESIÓN
     //region
@@ -82,10 +102,7 @@ public class PanelPrincipal extends JPanel{
     private JTextField txtNumeroTarjeta_PantallaDatosBancarios, txtFechaCaducidad_PantallaDatosBancarios, txtCVC_PantallaDatosBancarios;
     private Date fechaCaducidadtarjeta_PantallaDatosBancarios;
     //endregion
-    //ELEMENTOS PANTALLA DE BILLETES DISPONIBLES PANTALLA INICIAL
-    //region
-    JButton btnVolverPantallaInicio_PantallaBilletesInicio;
-    //endregion
+
     class LinePanel extends JPanel {
         @Override
         protected void paintComponent(Graphics g) {
@@ -187,40 +204,60 @@ public class PanelPrincipal extends JPanel{
         lblOrigen_PantallaInicial.setBounds(17*tamOrig, 9*tamOrig, 9*tamOrig, 3*tamOrig);
         pnlPantallaInicial.add(lblOrigen_PantallaInicial);
 
+        /*
         txtOrigen_PantallaInicial =new JTextField();
         txtOrigen_PantallaInicial.setFont(new Font("Arial",Font.BOLD,30));
         txtOrigen_PantallaInicial.setBounds(17*tamOrig, 12*tamOrig, 20*tamOrig, 3*tamOrig);
         pnlPantallaInicial.add(txtOrigen_PantallaInicial);
+        */
+
+        comboBoxModelOrigen_PantallaInicial = new DefaultComboBoxModel<>();
+        comboBoxCiudadesOrigen_PantallaInicial = new JComboBox<>(comboBoxModelOrigen_PantallaInicial);
+        comboBoxCiudadesOrigen_PantallaInicial.setFont(new Font("Arial",Font.BOLD,30));
+        comboBoxCiudadesOrigen_PantallaInicial.setBounds(17*tamOrig, 12*tamOrig, 20*tamOrig, 3*tamOrig);
+        comboBoxCiudadesOrigen_PantallaInicial.setBackground(Color.white);
+        comboBoxCiudadesOrigen_PantallaInicial.setMaximumRowCount(5);
+        updateComboBoxOrigen_Cities(allCities);
+        JScrollPane scrollPaneOrigen_Ciudades = new JScrollPane(comboBoxCiudadesOrigen_PantallaInicial);
+        scrollPaneOrigen_Ciudades.setBounds(17*tamOrig, 12*tamOrig, 20*tamOrig, 10*tamOrig);
+        pnlPantallaInicial.add(comboBoxCiudadesOrigen_PantallaInicial);
+        scrollPaneOrigen_Ciudades.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPaneOrigen_Ciudades.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 
         lblDestino_PantallaInicial =new JLabel("Destino:");
         lblDestino_PantallaInicial.setFont(new Font("Arial",Font.BOLD,30));
         lblDestino_PantallaInicial.setBounds(40*tamOrig, 9*tamOrig, 9*tamOrig, 3*tamOrig);
         pnlPantallaInicial.add(lblDestino_PantallaInicial);
 
+        /*
         txtDestino_PantallaInicial =new JTextField();
         txtDestino_PantallaInicial.setFont(new Font("Arial",Font.BOLD,30));
         txtDestino_PantallaInicial.setBounds(40*tamOrig, 12*tamOrig, 20*tamOrig, 3*tamOrig);
         pnlPantallaInicial.add(txtDestino_PantallaInicial);
+         */
 
-        lblFechaIda_PantallaInicial =new JLabel("Ida:");
+        comboBoxModelDestino_PantallaInicial = new DefaultComboBoxModel<>();
+        comboBoxCiudadesDestino_PantallaInicial = new JComboBox<>(comboBoxModelDestino_PantallaInicial);
+        comboBoxCiudadesDestino_PantallaInicial.setFont(new Font("Arial",Font.BOLD,30));
+        comboBoxCiudadesDestino_PantallaInicial.setBounds(40*tamOrig, 12*tamOrig, 20*tamOrig, 3*tamOrig);
+        comboBoxCiudadesDestino_PantallaInicial.setBackground(Color.white);
+        comboBoxCiudadesDestino_PantallaInicial.setMaximumRowCount(5);
+        updateComboBoxDestino_Cities(allCities);
+        JScrollPane scrollPaneDestino_Ciudades = new JScrollPane(comboBoxCiudadesDestino_PantallaInicial);
+        scrollPaneDestino_Ciudades.setBounds(40*tamOrig, 12*tamOrig, 20*tamOrig, 10*tamOrig);
+        pnlPantallaInicial.add(comboBoxCiudadesDestino_PantallaInicial);
+        scrollPaneDestino_Ciudades.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPaneDestino_Ciudades.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+
+        lblFechaIda_PantallaInicial =new JLabel("Fecha (DD/MM/AAAA):");
         lblFechaIda_PantallaInicial.setFont(new Font("Arial",Font.BOLD,30));
-        lblFechaIda_PantallaInicial.setBounds(17*tamOrig, 15*tamOrig, 9*tamOrig, 3*tamOrig);
+        lblFechaIda_PantallaInicial.setBounds(17*tamOrig, 15*tamOrig, 20*tamOrig, 3*tamOrig);
         pnlPantallaInicial.add(lblFechaIda_PantallaInicial);
 
         txtFechaIda_PantallaInicial =new JTextField();
         txtFechaIda_PantallaInicial.setFont(new Font("Arial",Font.BOLD,30));
         txtFechaIda_PantallaInicial.setBounds(17*tamOrig, 18*tamOrig, 20*tamOrig, 3*tamOrig);
         pnlPantallaInicial.add(txtFechaIda_PantallaInicial);
-
-        lblFechaVuelta_PantallaInicial =new JLabel("Vuelta:");
-        lblFechaVuelta_PantallaInicial.setFont(new Font("Arial",Font.BOLD,30));
-        lblFechaVuelta_PantallaInicial.setBounds(40*tamOrig, 15*tamOrig, 9*tamOrig, 3*tamOrig);
-        pnlPantallaInicial.add(lblFechaVuelta_PantallaInicial);
-
-        txtFechaVuelta_PantallaInicial =new JTextField();
-        txtFechaVuelta_PantallaInicial.setFont(new Font("Arial",Font.BOLD,30));
-        txtFechaVuelta_PantallaInicial.setBounds(40*tamOrig, 18*tamOrig, 20*tamOrig, 3*tamOrig);
-        pnlPantallaInicial.add(txtFechaVuelta_PantallaInicial);
 
         btnBuscarDatos_PantallaInicial =new JButton("Buscar");
         btnBuscarDatos_PantallaInicial.setBackground(Color.WHITE);
@@ -229,22 +266,30 @@ public class PanelPrincipal extends JPanel{
         btnBuscarDatos_PantallaInicial.addActionListener(new eventoBotonesPanelPrincipal());
         pnlPantallaInicial.add(btnBuscarDatos_PantallaInicial);
 
-        lblBuscarDatos_PantallaInicial =new JLabel("Hay x vuelos disponiles para la ida y x para la vuelta. Inicie sesión para comprar.");
-        lblBuscarDatos_PantallaInicial.setForeground(Color.RED);
-        lblBuscarDatos_PantallaInicial.setFont(new Font("Arial",Font.BOLD,20));
-        lblBuscarDatos_PantallaInicial.setBounds(tamOrig, 25*tamOrig, ancho, 3*tamOrig);
-        lblBuscarDatos_PantallaInicial.setHorizontalAlignment(JLabel.CENTER);
-        pnlPantallaInicial.add(lblBuscarDatos_PantallaInicial);
-        lblBuscarDatos_PantallaInicial.setVisible(false);
+        lblNoHayVuelosDisponibles_PantallaBilletesInicio =new JLabel("No hay billetes disponibles para los datos que ha seleccionado");
+        lblNoHayVuelosDisponibles_PantallaBilletesInicio.setForeground(Color.RED);
+        lblNoHayVuelosDisponibles_PantallaBilletesInicio.setFont(new Font("Arial",Font.BOLD,20));
+        lblNoHayVuelosDisponibles_PantallaBilletesInicio.setBounds(tamOrig, 25*tamOrig, ancho, 3*tamOrig);
+        lblNoHayVuelosDisponibles_PantallaBilletesInicio.setHorizontalAlignment(JLabel.CENTER);
+        pnlPantallaInicial.add(lblNoHayVuelosDisponibles_PantallaBilletesInicio);
+        lblNoHayVuelosDisponibles_PantallaBilletesInicio.setVisible(false);
+
+        lblNoHayVuelosDisponiblesID_PantallaBilletesInicio =new JLabel("No hay billetes disponibles con ese identificador de vuelo");
+        lblNoHayVuelosDisponiblesID_PantallaBilletesInicio.setForeground(Color.RED);
+        lblNoHayVuelosDisponiblesID_PantallaBilletesInicio.setFont(new Font("Arial",Font.BOLD,20));
+        lblNoHayVuelosDisponiblesID_PantallaBilletesInicio.setBounds(tamOrig, 41*tamOrig, ancho, 3*tamOrig);
+        lblNoHayVuelosDisponiblesID_PantallaBilletesInicio.setHorizontalAlignment(JLabel.CENTER);
+        pnlPantallaInicial.add(lblNoHayVuelosDisponiblesID_PantallaBilletesInicio);
+        lblNoHayVuelosDisponiblesID_PantallaBilletesInicio.setVisible(false);
 
         lblBusquedaID_PantallaInicial =new JLabel("Búsqueda con ID del vuelo:");
         lblBusquedaID_PantallaInicial.setFont(new Font("Arial",Font.BOLD,30));
         lblBusquedaID_PantallaInicial.setBounds(tamOrig, 28*tamOrig, 25*tamOrig, 3*tamOrig);
         pnlPantallaInicial.add(lblBusquedaID_PantallaInicial);
 
-        lblIDIda_PantallaInicial =new JLabel("ID de Ida:");
+        lblIDIda_PantallaInicial =new JLabel("ID del vuelo (ICAIRX):");
         lblIDIda_PantallaInicial.setFont(new Font("Arial",Font.BOLD,30));
-        lblIDIda_PantallaInicial.setBounds(17*tamOrig, 31*tamOrig, 9*tamOrig, 3*tamOrig);
+        lblIDIda_PantallaInicial.setBounds(17*tamOrig, 31*tamOrig, 20*tamOrig, 3*tamOrig);
         pnlPantallaInicial.add(lblIDIda_PantallaInicial);
 
         txtIDIda_PantallaInicial =new JTextField();
@@ -252,30 +297,12 @@ public class PanelPrincipal extends JPanel{
         txtIDIda_PantallaInicial.setBounds(17*tamOrig, 34*tamOrig, 20*tamOrig, 3*tamOrig);
         pnlPantallaInicial.add(txtIDIda_PantallaInicial);
 
-        lblIDVuelta_PantallaInicial =new JLabel("ID de Vuelta:");
-        lblIDVuelta_PantallaInicial.setFont(new Font("Arial",Font.BOLD,30));
-        lblIDVuelta_PantallaInicial.setBounds(40*tamOrig, 31*tamOrig, 13*tamOrig, 3*tamOrig);
-        pnlPantallaInicial.add(lblIDVuelta_PantallaInicial);
-
-        txtIDVuelta_PantallaInicial =new JTextField();
-        txtIDVuelta_PantallaInicial.setFont(new Font("Arial",Font.BOLD,30));
-        txtIDVuelta_PantallaInicial.setBounds(40*tamOrig, 34*tamOrig, 20*tamOrig, 3*tamOrig);
-        pnlPantallaInicial.add(txtIDVuelta_PantallaInicial);
-
         btnBuscarID_PantallaInicial =new JButton("Buscar");
         btnBuscarID_PantallaInicial.setBackground(Color.WHITE);
         btnBuscarID_PantallaInicial.setFont(new Font("Arial",Font.BOLD,30));
         btnBuscarID_PantallaInicial.setBounds(28*tamOrig, 38*tamOrig, 20*tamOrig, 3*tamOrig);
         btnBuscarID_PantallaInicial.addActionListener(new eventoBotonesPanelPrincipal());
         pnlPantallaInicial.add(btnBuscarID_PantallaInicial);
-
-        lblBuscarID_PantallaInicial =new JLabel("Hay x vuelos disponiles para la ida y x para la vuelta. Inicie sesión para comprar.");
-        lblBuscarID_PantallaInicial.setForeground(Color.RED);
-        lblBuscarID_PantallaInicial.setFont(new Font("Arial",Font.BOLD,20));
-        lblBuscarID_PantallaInicial.setBounds(tamOrig, 41*tamOrig, ancho, 3*tamOrig);
-        lblBuscarID_PantallaInicial.setHorizontalAlignment(JLabel.CENTER);
-        pnlPantallaInicial.add(lblBuscarID_PantallaInicial);
-        lblBuscarID_PantallaInicial.setVisible(false);
 
         LinePanel linePanel1 = new LinePanel();
         linePanel1.setBounds(tamOrig, 6*tamOrig, ancho, 1);
@@ -287,6 +314,40 @@ public class PanelPrincipal extends JPanel{
         this.add(pnlPantallaInicial);
         //endregion
         pnlPantallaInicial.setVisible(true);
+
+        //PANTALLA DE BILLETES DISPOBILES DEL BUSCADOR DE LA PÁGINA INICIAL
+        //region
+        pnlMostrarBilletesInicio=new JPanel();
+        pnlMostrarBilletesInicio.setBackground(Color.white);
+        pnlMostrarBilletesInicio.setPreferredSize(d1);
+        pnlMostrarBilletesInicio.setLayout(null);
+
+        ImageIcon imageIconLogoMostrarBilletesInicio = null;
+        try {
+            imageIconLogoMostrarBilletesInicio = new ImageIcon(ImageIO.read(new File("C:\\ICAIR\\Imagenes\\Logo3.jpeg")));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        JLabel lblLogoMostrarBilletesInicio = new JLabel(imageIconLogoMostrarBilletesInicio);
+        lblLogoMostrarBilletesInicio.setBounds(tamOrig, tamOrig, 13*tamOrig, 4*tamOrig);
+        pnlMostrarBilletesInicio.add(lblLogoMostrarBilletesInicio);
+
+        LinePanel linePanel7 = new LinePanel();
+        linePanel7.setBounds(tamOrig, 6*tamOrig, ancho, 1);
+        pnlMostrarBilletesInicio.add(linePanel7);
+
+        btnVolverPantallaInicio_PantallaBilletesInicio =new JButton("Volver");
+        btnVolverPantallaInicio_PantallaBilletesInicio.setBackground(Color.WHITE);
+        btnVolverPantallaInicio_PantallaBilletesInicio.setFont(new Font("Arial",Font.BOLD,30));
+        btnVolverPantallaInicio_PantallaBilletesInicio.setBounds(ancho-200, tamOrig, 11*tamOrig, 4*tamOrig);
+        btnVolverPantallaInicio_PantallaBilletesInicio.addActionListener(new eventoBotonesPantallaBilletesInicio());
+        pnlMostrarBilletesInicio.add(btnVolverPantallaInicio_PantallaBilletesInicio);
+
+
+
+        this.add(pnlMostrarBilletesInicio);
+        //endregion
+        pnlMostrarBilletesInicio.setVisible(false);
 
         //PANTALLA DE REGISTRO
         //region
@@ -366,12 +427,12 @@ public class PanelPrincipal extends JPanel{
         comboBoxNacionalidades_PantallaRegistro.setBounds(40*tamOrig, 21*tamOrig, 30*tamOrig, 3*tamOrig);
         comboBoxNacionalidades_PantallaRegistro.setBackground(Color.white);
         comboBoxNacionalidades_PantallaRegistro.setMaximumRowCount(5);
-        updateComboBox(allCountries);
-        JScrollPane scrollPane = new JScrollPane(comboBoxNacionalidades_PantallaRegistro);
-        scrollPane.setBounds(40*tamOrig, 21*tamOrig, 30*tamOrig, 10*tamOrig);
+        updateComboBox_Countries(allCountries);
+        JScrollPane scrollPane_Paises = new JScrollPane(comboBoxNacionalidades_PantallaRegistro);
+        scrollPane_Paises.setBounds(40*tamOrig, 21*tamOrig, 30*tamOrig, 10*tamOrig);
         pnlPantallaRegistro.add(comboBoxNacionalidades_PantallaRegistro);
-        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollPane_Paises.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane_Paises.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 
 
         lblCorreoElectronico_PantallaRegistro =new JLabel("Correo electrónico (X@Y.Z):");
@@ -383,16 +444,6 @@ public class PanelPrincipal extends JPanel{
         txtCorreoElectronico_PantallaRegistro.setFont(new Font("Arial",Font.BOLD,30));
         txtCorreoElectronico_PantallaRegistro.setBounds(3*tamOrig, 27*tamOrig, 30*tamOrig, 3*tamOrig);
         pnlPantallaRegistro.add(txtCorreoElectronico_PantallaRegistro);
-
-        lblDNI_PantallaRegistro =new JLabel("DNI:");
-        lblDNI_PantallaRegistro.setFont(new Font("Arial",Font.BOLD,30));
-        lblDNI_PantallaRegistro.setBounds(40*tamOrig, 24*tamOrig, 30*tamOrig, 3*tamOrig);
-        pnlPantallaRegistro.add(lblDNI_PantallaRegistro);
-
-        txtDNI_PantallaRegistro =new JTextField();
-        txtDNI_PantallaRegistro.setFont(new Font("Arial",Font.BOLD,30));
-        txtDNI_PantallaRegistro.setBounds(40*tamOrig, 27*tamOrig, 30*tamOrig, 3*tamOrig);
-        pnlPantallaRegistro.add(txtDNI_PantallaRegistro);
 
         lblContraseña1_PantallaRegistro =new JLabel("Contraseña:");
         lblContraseña1_PantallaRegistro.setFont(new Font("Arial",Font.BOLD,30));
@@ -487,7 +538,7 @@ public class PanelPrincipal extends JPanel{
         lblCorreElectronico_PantallaInicioSesion.setBounds(3*tamOrig, 6*tamOrig, 20*tamOrig, 3*tamOrig);
         pnlPantallaInicioSesion.add(lblCorreElectronico_PantallaInicioSesion);
 
-        txtCorreoElectronico_PantallaInicioSesion =new JTextField();
+        txtCorreoElectronico_PantallaInicioSesion =new JTextField("pedro@marcos.plaza");
         txtCorreoElectronico_PantallaInicioSesion.setFont(new Font("Arial",Font.BOLD,30));
         txtCorreoElectronico_PantallaInicioSesion.setBounds(3*tamOrig, 9*tamOrig, 30*tamOrig, 3*tamOrig);
         pnlPantallaInicioSesion.add(txtCorreoElectronico_PantallaInicioSesion);
@@ -497,7 +548,7 @@ public class PanelPrincipal extends JPanel{
         lblContraseña_PantallaInicioSesion.setBounds(3*tamOrig, 12*tamOrig, 30*tamOrig, 3*tamOrig);
         pnlPantallaInicioSesion.add(lblContraseña_PantallaInicioSesion);
 
-        txtContraseña_PantallaInicioSesion =new JTextField();
+        txtContraseña_PantallaInicioSesion =new JTextField("1234");
         txtContraseña_PantallaInicioSesion.setFont(new Font("Arial",Font.BOLD,30));
         txtContraseña_PantallaInicioSesion.setBounds(3*tamOrig, 15*tamOrig, 30*tamOrig, 3*tamOrig);
         pnlPantallaInicioSesion.add(txtContraseña_PantallaInicioSesion);
@@ -515,6 +566,14 @@ public class PanelPrincipal extends JPanel{
         btnVolverPantallaInicio_PantallaInicioSesion.setBounds(ancho-200, tamOrig, 11*tamOrig, 4*tamOrig);
         btnVolverPantallaInicio_PantallaInicioSesion.addActionListener(new eventoBotonesPanelInicioSesion());
         pnlPantallaInicioSesion.add(btnVolverPantallaInicio_PantallaInicioSesion);
+
+        lblLoginFallido_PantallaInicioSesion=new JLabel("Correo o contraseña erroneos");
+        lblLoginFallido_PantallaInicioSesion.setForeground(Color.RED);
+        lblLoginFallido_PantallaInicioSesion.setFont(new Font("Arial",Font.BOLD,20));
+        lblLoginFallido_PantallaInicioSesion.setBounds(tamOrig, 41*tamOrig, ancho, 3*tamOrig);
+        lblLoginFallido_PantallaInicioSesion.setHorizontalAlignment(JLabel.CENTER);
+        pnlPantallaInicioSesion.add(lblLoginFallido_PantallaInicioSesion);
+        lblLoginFallido_PantallaInicioSesion.setVisible(false);
 
         this.add(pnlPantallaInicioSesion);
         //endregion
@@ -540,11 +599,6 @@ public class PanelPrincipal extends JPanel{
         LinePanel linePanel5 = new LinePanel();
         linePanel5.setBounds(tamOrig, 6*tamOrig, ancho, 1);
         pnlOpcionesSesionIniciada.add(linePanel5);
-
-        lblNombreUsuarioIniciado_PantallaOpciones =new JLabel("Nombre usuario");
-        lblNombreUsuarioIniciado_PantallaOpciones.setFont(new Font("Arial",Font.BOLD,30));
-        lblNombreUsuarioIniciado_PantallaOpciones.setBounds(ancho-950, tamOrig, 25*tamOrig, 4*tamOrig);
-        pnlOpcionesSesionIniciada.add(lblNombreUsuarioIniciado_PantallaOpciones);
 
         btnCerrarSesion_PantallaOpciones =new JButton("Cerrar sesión");
         btnCerrarSesion_PantallaOpciones.setBackground(Color.WHITE);
@@ -574,19 +628,7 @@ public class PanelPrincipal extends JPanel{
         btnAñadirDatosBancarios_PantallaOpciones.addActionListener(new eventoBotonesPanelOpcionesSesionIniciada());
         pnlOpcionesSesionIniciada.add(btnAñadirDatosBancarios_PantallaOpciones);
 
-        btnSuscribirse_PantallaOpciones =new JButton("Suscribirse");
-        btnSuscribirse_PantallaOpciones.setBackground(Color.WHITE);
-        btnSuscribirse_PantallaOpciones.setFont(new Font("Arial",Font.BOLD,30));
-        btnSuscribirse_PantallaOpciones.setBounds(25*tamOrig, 25*tamOrig, 25*tamOrig, 5*tamOrig);
-        btnSuscribirse_PantallaOpciones.addActionListener(new eventoBotonesPanelOpcionesSesionIniciada());
-        pnlOpcionesSesionIniciada.add(btnSuscribirse_PantallaOpciones);
 
-        btnCancelarSuscripcion_PantallaOpciones =new JButton("Cancelar suscribcion");
-        btnCancelarSuscripcion_PantallaOpciones.setBackground(Color.WHITE);
-        btnCancelarSuscripcion_PantallaOpciones.setFont(new Font("Arial",Font.BOLD,30));
-        btnCancelarSuscripcion_PantallaOpciones.setBounds(25*tamOrig, 31*tamOrig, 25*tamOrig, 5*tamOrig);
-        btnCancelarSuscripcion_PantallaOpciones.addActionListener(new eventoBotonesPanelOpcionesSesionIniciada());
-        pnlOpcionesSesionIniciada.add(btnCancelarSuscripcion_PantallaOpciones);
 
         this.add(pnlOpcionesSesionIniciada);
         //endregion
@@ -838,212 +880,360 @@ public class PanelPrincipal extends JPanel{
         //endregion
         pnlAñadirDatosBancarios.setVisible(false);
 
-        //PANTALLA DE BILLETES DISPOBILES DEL BUSCADOR DE LA PÁGINA INICIAL
-        //region
-        pnlMostrarBilletesInicio=new JPanel();
-        pnlMostrarBilletesInicio.setBackground(Color.white);
-        pnlMostrarBilletesInicio.setPreferredSize(d1);
-        pnlMostrarBilletesInicio.setLayout(null);
 
-        ImageIcon imageIconLogoMostrarBilletesInicio = null;
-        try {
-            imageIconLogoMostrarBilletesInicio = new ImageIcon(ImageIO.read(new File("C:\\ICAIR\\Imagenes\\Logo3.jpeg")));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        JLabel lblLogoMostrarBilletesInicio = new JLabel(imageIconLogoMostrarBilletesInicio);
-        lblLogoMostrarBilletesInicio.setBounds(tamOrig, tamOrig, 13*tamOrig, 4*tamOrig);
-        pnlMostrarBilletesInicio.add(lblLogoMostrarBilletesInicio);
-
-        LinePanel linePanel7 = new LinePanel();
-        linePanel7.setBounds(tamOrig, 6*tamOrig, ancho, 1);
-        pnlMostrarBilletesInicio.add(linePanel7);
-
-        btnVolverPantallaInicio_PantallaBilletesInicio =new JButton("Volver");
-        btnVolverPantallaInicio_PantallaBilletesInicio.setBackground(Color.WHITE);
-        btnVolverPantallaInicio_PantallaBilletesInicio.setFont(new Font("Arial",Font.BOLD,30));
-        btnVolverPantallaInicio_PantallaBilletesInicio.setBounds(ancho-200, tamOrig, 11*tamOrig, 4*tamOrig);
-        btnVolverPantallaInicio_PantallaBilletesInicio.addActionListener(new eventoBotonesPantallaBilletesInicio());
-        pnlMostrarBilletesInicio.add(btnVolverPantallaInicio_PantallaBilletesInicio);
-
-        this.add(pnlMostrarBilletesInicio);
-        //endregion
-        pnlMostrarBilletesInicio.setVisible(false);
     }
 
     private class eventoBotonesPanelPrincipal implements ActionListener{
         @Override
         public void actionPerformed(ActionEvent e) {
+            String origen= comboBoxCiudadesOrigen_PantallaInicial.getSelectedItem().toString().trim();
+            String destino= comboBoxCiudadesDestino_PantallaInicial.getSelectedItem().toString().trim();
+            String fecha=txtFechaIda_PantallaInicial.getText().trim();
+            String id=txtIDIda_PantallaInicial.getText().trim();
             if(e.getSource()== btnIniciarSesion_PantallaInicial) {
-                lblBuscarDatos_PantallaInicial.setVisible(false);
-                lblBuscarID_PantallaInicial.setVisible((false));
+                comboBoxCiudadesOrigen_PantallaInicial.setSelectedItem("");
+                comboBoxCiudadesDestino_PantallaInicial.setSelectedItem("");
+                txtFechaIda_PantallaInicial.setText("");
+                txtIDIda_PantallaInicial.setText("");
+                lblNoHayVuelosDisponibles_PantallaBilletesInicio.setVisible(false);
+                lblNoHayVuelosDisponiblesID_PantallaBilletesInicio.setVisible(false);
                 pnlPantallaInicial.setVisible(false);
                 pnlPantallaInicioSesion.setVisible(true);
             }
             if(e.getSource()== btnRegistrarse_PantallaInicial) {
-                lblBuscarDatos_PantallaInicial.setVisible(false);
-                lblBuscarID_PantallaInicial.setVisible((false));
+                comboBoxCiudadesOrigen_PantallaInicial.setSelectedItem("");
+                comboBoxCiudadesDestino_PantallaInicial.setSelectedItem("");
+                txtFechaIda_PantallaInicial.setText("");
+                txtIDIda_PantallaInicial.setText("");
+                lblNoHayVuelosDisponibles_PantallaBilletesInicio.setVisible(false);
+                lblNoHayVuelosDisponiblesID_PantallaBilletesInicio.setVisible(false);
                 pnlPantallaInicial.setVisible(false);
                 pnlPantallaRegistro.setVisible(true);
             }
             if(e.getSource()== btnBuscarDatos_PantallaInicial){
-                lblBuscarDatos_PantallaInicial.setVisible(false);
-                lblBuscarID_PantallaInicial.setVisible((false));
-                pnlPantallaInicial.setVisible(false);
-                pnlMostrarBilletesInicio.setVisible(true);
+                if(origen.isEmpty()){
+                    lblOrigen_PantallaInicial.setForeground(Color.RED);
+                }
+                else{
+                    lblOrigen_PantallaInicial.setForeground(Color.BLACK);
+                }
+                if(destino.isEmpty()){
+                    lblDestino_PantallaInicial.setForeground(Color.RED);
+                }
+                else{
+                    lblDestino_PantallaInicial.setForeground(Color.BLACK);
+                }
+                if(fecha.length()==10) {
+                    if (esEntero(fecha.substring(0, 2)) == true && esEntero(fecha.substring(3, 5)) == true && esEntero(fecha.substring(6, 10)) == true && fecha.substring(2, 3).equals("/")
+                            && fecha.substring(5, 6).equals("/")) {
+                        lblFechaIda_PantallaInicial.setForeground(Color.BLACK);
+                    } else {
+                        lblFechaIda_PantallaInicial.setForeground(Color.RED);
+                    }
+                }
+                else{
+                    lblFechaIda_PantallaInicial.setForeground(Color.RED);
+                }
+                if(lblOrigen_PantallaInicial.getForeground().equals(Color.BLACK) && lblDestino_PantallaInicial.getForeground().equals(Color.BLACK) && lblFechaIda_PantallaInicial.getForeground().equals(Color.BLACK)){
+                    Avion avion  = new Avion(origen, destino, fecha);
+                    String context = "/findAvion";
+                    Client cliente = new Client();
+                    boolean mensajeBuscarVuelo=cliente.sendMessage_Avion(context, avion);
+                    if(mensajeBuscarVuelo==true){
+                        String context1 = "/ListaVuelos";
+                        Client cliente1 = new Client();
+                        List<Avion> vuelos = cliente.buscarVuelos(context1, avion);
+                        // Inicializamos la matriz con el tamaño adecuado
+                        String[] nombresColumnas_PantallaBilletesInicio = {"ID Vuelo", "Origen", "Destino", "Fecha", "Hora", "Duración", "Asientos"};
+                        Object[][] datosVuelo_PantallaBilletesInicio;
+                        datosVuelo_PantallaBilletesInicio= new Object[vuelos.size()][7]; // 7 columnas en el formato que necesitamos
+                        // Recorremos la lista de aviones y llenamos la matriz
+                        for (int i = 0; i < vuelos.size(); i++) {
+                            Avion avion_i = vuelos.get(i);
+                            datosVuelo_PantallaBilletesInicio[i][0] = avion_i.getId().toString(); // Código del vuelo
+                            datosVuelo_PantallaBilletesInicio[i][1] = avion_i.getOrigen(); // Origen
+                            datosVuelo_PantallaBilletesInicio[i][2] = avion_i.getDestino(); // Destino
+                            datosVuelo_PantallaBilletesInicio[i][3] = avion_i.getFecha(); // Fecha
+                            datosVuelo_PantallaBilletesInicio[i][4] = avion_i.getHora_salida(); // Hora de salida
+                            datosVuelo_PantallaBilletesInicio[i][5] = avion_i.getDuracion(); // Duración
+                            datosVuelo_PantallaBilletesInicio[i][6] = avion_i.getAsientos_disp().toString() + "/" + avion_i.getAsientos_tot().toString(); // Asientos disponibles/totales
+                        }
+
+                        pnlSecundario_PantallaBilletesInicio=new JPanel();
+                        pnlSecundario_PantallaBilletesInicio.setBackground(Color.BLACK);
+                        pnlSecundario_PantallaBilletesInicio.setBounds(tamOrig,7*tamOrig,ancho-2*tamOrig,alto-20*tamOrig);
+                        pnlSecundario_PantallaBilletesInicio.setLayout(new BorderLayout());
+
+                        modelotablaVuelos_PantallaBilletesInicio = new DefaultTableModel(datosVuelo_PantallaBilletesInicio, nombresColumnas_PantallaBilletesInicio);
+                        tablaVuelos_PantallaBilletesInicio = new JTable(modelotablaVuelos_PantallaBilletesInicio);
+                        tablaVuelos_PantallaBilletesInicio.setRowHeight(50);
+                        JTableHeader header = tablaVuelos_PantallaBilletesInicio.getTableHeader();
+                        header.setPreferredSize(new Dimension(header.getWidth(), 50));
+                        Font fontCeldas = new Font("Arial", Font.PLAIN, 19); // Cambia "Arial", "PLAIN" y tamaño según lo necesites
+                        tablaVuelos_PantallaBilletesInicio.setFont(fontCeldas);
+                        Font fontEncabezado = new Font("Arial", Font.BOLD, 20);
+                        tablaVuelos_PantallaBilletesInicio.getTableHeader().setFont(fontEncabezado);
+                        tablaVuelos_PantallaBilletesInicio.getColumnModel().getColumn(0).setPreferredWidth(10);
+                        tablaVuelos_PantallaBilletesInicio.getColumnModel().getColumn(1).setPreferredWidth(230);
+                        tablaVuelos_PantallaBilletesInicio.getColumnModel().getColumn(2).setPreferredWidth(230);
+                        tablaVuelos_PantallaBilletesInicio.getColumnModel().getColumn(3).setPreferredWidth(40);
+                        tablaVuelos_PantallaBilletesInicio.getColumnModel().getColumn(4).setPreferredWidth(10);
+                        tablaVuelos_PantallaBilletesInicio.getColumnModel().getColumn(5).setPreferredWidth(10);
+                        tablaVuelos_PantallaBilletesInicio.getColumnModel().getColumn(6).setPreferredWidth(10);
+                        scrollPaneTabla_PantallaBilletesInicio = new JScrollPane(tablaVuelos_PantallaBilletesInicio);
+                        scrollPaneTabla_PantallaBilletesInicio.setPreferredSize(new Dimension(ancho, alto-11*tamOrig));
+
+                        pnlSecundario_PantallaBilletesInicio.add(scrollPaneTabla_PantallaBilletesInicio, BorderLayout.CENTER);
+
+                        pnlMostrarBilletesInicio.add(pnlSecundario_PantallaBilletesInicio);
+
+                        comboBoxCiudadesOrigen_PantallaInicial.setSelectedItem("");
+                        comboBoxCiudadesDestino_PantallaInicial.setSelectedItem("");
+                        txtFechaIda_PantallaInicial.setText("");
+                        txtIDIda_PantallaInicial.setText("");
+                        lblNoHayVuelosDisponiblesID_PantallaBilletesInicio.setVisible(false);
+                        lblNoHayVuelosDisponibles_PantallaBilletesInicio.setVisible(false);
+
+                        pnlPantallaInicial.setVisible(false);
+                        pnlMostrarBilletesInicio.setVisible(true);
+                    }
+                    else{
+                        lblNoHayVuelosDisponiblesID_PantallaBilletesInicio.setVisible(false);
+                        lblNoHayVuelosDisponibles_PantallaBilletesInicio.setVisible(true);
+                    }
+                }
             }
             if(e.getSource()== btnBuscarID_PantallaInicial){
-                lblBuscarDatos_PantallaInicial.setVisible(false);
-                lblBuscarID_PantallaInicial.setVisible((false));
-                pnlPantallaInicial.setVisible(false);
-                pnlMostrarBilletesInicio.setVisible(true);
+                Pattern pattern = Pattern.compile("^ICAIR(\\d+)$");
+                Matcher matcher = pattern.matcher(id);
+
+                // Verificar si el texto coincide con el patrón
+                if (matcher.matches()) {
+                    lblIDIda_PantallaInicial.setForeground(Color.BLACK);
+                }
+                else {
+                    lblIDIda_PantallaInicial.setForeground(Color.RED);
+                }
+                if(lblIDIda_PantallaInicial.getForeground().equals(Color.BLACK)) {
+                    Avion avion = new Avion(Integer.parseInt(matcher.group(1)));
+                    String context = "/findAvionID";
+                    Client cliente = new Client();
+                    boolean mensajeBuscarVuelo = cliente.sendMessage_AvionID(context, avion);
+                    if (mensajeBuscarVuelo == true) {
+                        String context1 = "/ListaVuelosID";
+                        Client cliente1 = new Client();
+                        List<Avion> vuelos = cliente.buscarVuelosID(context1, avion);
+                        // Inicializamos la matriz con el tamaño adecuado
+                        String[] nombresColumnas_PantallaBilletesInicio = {"ID Vuelo", "Origen", "Destino", "Fecha", "Hora", "Duración", "Asientos"};
+                        Object[][] datosVuelo_PantallaBilletesInicio;
+                        datosVuelo_PantallaBilletesInicio = new Object[vuelos.size()][7]; // 7 columnas en el formato que necesitamos
+                        // Recorremos la lista de aviones y llenamos la matriz
+                        for (int i = 0; i < vuelos.size(); i++) {
+                            Avion avion_i = vuelos.get(i);
+                            datosVuelo_PantallaBilletesInicio[i][0] = avion_i.getId().toString(); // Código del vuelo
+                            datosVuelo_PantallaBilletesInicio[i][1] = avion_i.getOrigen(); // Origen
+                            datosVuelo_PantallaBilletesInicio[i][2] = avion_i.getDestino(); // Destino
+                            datosVuelo_PantallaBilletesInicio[i][3] = avion_i.getFecha(); // Fecha
+                            datosVuelo_PantallaBilletesInicio[i][4] = avion_i.getHora_salida(); // Hora de salida
+                            datosVuelo_PantallaBilletesInicio[i][5] = avion_i.getDuracion(); // Duración
+                            datosVuelo_PantallaBilletesInicio[i][6] = avion_i.getAsientos_disp().toString() + "/" + avion_i.getAsientos_tot().toString(); // Asientos disponibles/totales
+                        }
+
+                        pnlSecundario_PantallaBilletesInicio = new JPanel();
+                        pnlSecundario_PantallaBilletesInicio.setBackground(Color.BLACK);
+                        pnlSecundario_PantallaBilletesInicio.setBounds(tamOrig, 7 * tamOrig, ancho - 2 * tamOrig, alto - 20 * tamOrig);
+                        pnlSecundario_PantallaBilletesInicio.setLayout(new BorderLayout());
+
+                        modelotablaVuelos_PantallaBilletesInicio = new DefaultTableModel(datosVuelo_PantallaBilletesInicio, nombresColumnas_PantallaBilletesInicio);
+                        tablaVuelos_PantallaBilletesInicio = new JTable(modelotablaVuelos_PantallaBilletesInicio);
+                        tablaVuelos_PantallaBilletesInicio.setRowHeight(50);
+                        JTableHeader header = tablaVuelos_PantallaBilletesInicio.getTableHeader();
+                        header.setPreferredSize(new Dimension(header.getWidth(), 50));
+                        Font fontCeldas = new Font("Arial", Font.PLAIN, 19); // Cambia "Arial", "PLAIN" y tamaño según lo necesites
+                        tablaVuelos_PantallaBilletesInicio.setFont(fontCeldas);
+                        Font fontEncabezado = new Font("Arial", Font.BOLD, 20);
+                        tablaVuelos_PantallaBilletesInicio.getTableHeader().setFont(fontEncabezado);
+                        tablaVuelos_PantallaBilletesInicio.getColumnModel().getColumn(0).setPreferredWidth(10);
+                        tablaVuelos_PantallaBilletesInicio.getColumnModel().getColumn(1).setPreferredWidth(230);
+                        tablaVuelos_PantallaBilletesInicio.getColumnModel().getColumn(2).setPreferredWidth(230);
+                        tablaVuelos_PantallaBilletesInicio.getColumnModel().getColumn(3).setPreferredWidth(40);
+                        tablaVuelos_PantallaBilletesInicio.getColumnModel().getColumn(4).setPreferredWidth(10);
+                        tablaVuelos_PantallaBilletesInicio.getColumnModel().getColumn(5).setPreferredWidth(10);
+                        tablaVuelos_PantallaBilletesInicio.getColumnModel().getColumn(6).setPreferredWidth(10);
+                        scrollPaneTabla_PantallaBilletesInicio = new JScrollPane(tablaVuelos_PantallaBilletesInicio);
+                        scrollPaneTabla_PantallaBilletesInicio.setPreferredSize(new Dimension(ancho, alto - 11 * tamOrig));
+
+                        pnlSecundario_PantallaBilletesInicio.add(scrollPaneTabla_PantallaBilletesInicio, BorderLayout.CENTER);
+
+                        pnlMostrarBilletesInicio.add(pnlSecundario_PantallaBilletesInicio);
+
+                        comboBoxCiudadesOrigen_PantallaInicial.setSelectedItem("");
+                        comboBoxCiudadesDestino_PantallaInicial.setSelectedItem("");
+                        txtFechaIda_PantallaInicial.setText("");
+                        txtIDIda_PantallaInicial.setText("");
+                        lblNoHayVuelosDisponiblesID_PantallaBilletesInicio.setVisible(false);
+                        lblNoHayVuelosDisponibles_PantallaBilletesInicio.setVisible(false);
+
+                        pnlPantallaInicial.setVisible(false);
+                        pnlMostrarBilletesInicio.setVisible(true);
+                    }
+                    else {
+                        lblNoHayVuelosDisponibles_PantallaBilletesInicio.setVisible(false);
+                        lblNoHayVuelosDisponiblesID_PantallaBilletesInicio.setVisible(true);
+                    }
+                }
+            }
+
+        }
+    }
+    private class eventoBotonesPantallaBilletesInicio implements ActionListener{
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (e.getSource() == btnVolverPantallaInicio_PantallaBilletesInicio) {
+                pnlMostrarBilletesInicio.remove(pnlSecundario_PantallaBilletesInicio);
+                pnlMostrarBilletesInicio.setVisible(false);
+                pnlPantallaInicial.setVisible(true);
             }
         }
     }
     private class eventoBotonesPanelRegistro implements ActionListener{
         @Override
         public void actionPerformed(ActionEvent e) {
+            String Nombre= txtNombre_PantallaRegistro.getText().trim();
+            String Apellido1= txtApellido1_PantallaRegistro.getText().trim();
+            String Apellido2= txtApellido2_PantallaRegistro.getText().trim();
+            String FechaNacimiento_String= txtFechaNacimiento_PantallaRegistro.getText().trim();
+            Date FechaNacimiento_Date=fechaNacimiento_PantallaRegistro;
+            String Nacionalidad= comboBoxNacionalidades_PantallaRegistro.getSelectedItem().toString().trim();
+            String CorreoElectronico= txtCorreoElectronico_PantallaRegistro.getText().trim();
+            String Contraseña1= txtContraseña1_PantallaRegistro.getText().trim();
+            String Contraseña2= txtContraseña2_PantallaRegistro.getText().trim();
+
             if(e.getSource()== btnVolverPantallaInicio_PantallaRegistro){
                 pnlPantallaRegistro.setVisible(false);
                 pnlPantallaInicial.setVisible(true);
             }
             if(e.getSource()== btnRegistrarse_PantallaRegistro) {
-                String nombre= txtNombre_PantallaRegistro.getText().trim();
-                String apellido1= txtApellido1_PantallaRegistro.getText().trim();
-                String apellido2= txtApellido2_PantallaRegistro.getText().trim();
-                String FechaNacimiento= txtFechaNacimiento_PantallaRegistro.getText().trim();
-                String Nacionalidad= comboBoxNacionalidades_PantallaRegistro.getSelectedItem().toString().trim();
-                String CorreoElectronico= txtCorreoElectronico_PantallaRegistro.getText().trim();
-                String DNI= txtDNI_PantallaRegistro.getText().trim();
-                String Contraseña1= txtContraseña1_PantallaRegistro.getText().trim();
-                String Contraseña2= txtContraseña2_PantallaRegistro.getText().trim();
-                //PORQUE EL VALOR QUE COJE DE CORREO NO CAMBIA
-                //Voy a registrar un usuario
+                lblContraseñasDistintas.setVisible(false);
+                lblUsuarioExistente.setVisible(false);
+                lblUsuarioRegistradoConExito.setVisible(false);
 
-                User usuario = new User(nombre, apellido1, apellido2, FechaNacimiento, Nacionalidad, CorreoElectronico, Contraseña1);
-                String context = "/regUser";
-                Client cliente = new Client();
-                viable = true;
-
-
-
-                if(nombre.isEmpty()||apellido1.isEmpty()||apellido2.isEmpty()||FechaNacimiento.isEmpty()||Nacionalidad.isEmpty()||CorreoElectronico.isEmpty()||DNI.isEmpty()||Contraseña1.isEmpty()||Contraseña2.isEmpty()){
-                    if(nombre.isEmpty()){
-                        lblNombre_PantallaRegistro.setForeground(Color.RED);
-                    }
-                    else{
-                        lblNombre_PantallaRegistro.setForeground(Color.BLACK);
-                    }
-                    if(apellido1.isEmpty()){
-                        lblApellido1_PantallaRegistro.setForeground(Color.RED);
-                    }
-                    else{
-                        lblApellido1_PantallaRegistro.setForeground(Color.BLACK);
-                    }
-                    if(apellido2.isEmpty()){
-                        lblApellido2_PantallaRegistro.setForeground(Color.RED);
-                    }
-                    else{
-                        lblApellido2_PantallaRegistro.setForeground(Color.BLACK);
-                    }
-                    if(FechaNacimiento.isEmpty()){
-                        lblFechaNacimiento_PantallaRegistro.setForeground(Color.RED);
-                    }
-                    else{
+                if(Nombre.isEmpty()){
+                    lblNombre_PantallaRegistro.setForeground(Color.RED);
+                }
+                else{
+                    lblNombre_PantallaRegistro.setForeground(Color.BLACK);
+                }
+                if(Apellido1.isEmpty()){
+                    lblApellido1_PantallaRegistro.setForeground(Color.RED);
+                }
+                else{
+                    lblApellido1_PantallaRegistro.setForeground(Color.BLACK);
+                }
+                if(Apellido2.isEmpty()){
+                    lblApellido2_PantallaRegistro.setForeground(Color.RED);
+                }
+                else{
+                    lblApellido2_PantallaRegistro.setForeground(Color.BLACK);
+                }
+                if(FechaNacimiento_String.length()==10) {
+                    if (esEntero(FechaNacimiento_String.substring(0, 2)) == true && esEntero(FechaNacimiento_String.substring(3, 5)) == true && esEntero(FechaNacimiento_String.substring(6, 10)) == true && FechaNacimiento_String.substring(2, 3).equals("/")
+                            && FechaNacimiento_String.substring(5, 6).equals("/")) {
                         lblFechaNacimiento_PantallaRegistro.setForeground(Color.BLACK);
-                    }
-                    if(Nacionalidad.isEmpty()){
-                        lblNacionalidad_PantallaRegistro.setForeground(Color.RED);
-                    }
-                    else{
-                        lblNacionalidad_PantallaRegistro.setForeground(Color.BLACK);
-                    }
-                    if(CorreoElectronico.isEmpty()){
-                        lblCorreoElectronico_PantallaRegistro.setForeground(Color.RED);
-                    }
-                    else{
-                        lblCorreoElectronico_PantallaRegistro.setForeground(Color.BLACK);
-                    }
-                    if(DNI.isEmpty()){
-                        lblDNI_PantallaRegistro.setForeground(Color.RED);
-                    }
-                    else{
-                        lblDNI_PantallaRegistro.setForeground(Color.BLACK);
-                    }
-                    if(Contraseña1.isEmpty()){
-                        lblContraseña1_PantallaRegistro.setForeground(Color.RED);
-                    }
-                    else{
-                        lblContraseña1_PantallaRegistro.setForeground(Color.BLACK);
-                    }
-                    if(Contraseña2.isEmpty()){
-                        lblContraseña2_PantallaRegistro.setForeground(Color.RED);
-                    }
-                    else{
-                        lblContraseña2_PantallaRegistro.setForeground(Color.BLACK);
+                        SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy");
+                        try {
+                            fechaNacimiento_PantallaRegistro = formatoFecha.parse(FechaNacimiento_String);
+                            lblFechaNacimiento_PantallaRegistro.setForeground(Color.BLACK);
+                        } catch (ParseException ex) {
+                            lblFechaNacimiento_PantallaRegistro.setForeground(Color.RED);
+                        }
+                    } else {
+                        lblFechaNacimiento_PantallaRegistro.setForeground(Color.RED);
                     }
                 }
                 else{
-                    viable = true;
-                    lblNombre_PantallaRegistro.setForeground(Color.BLACK);
-                    lblApellido1_PantallaRegistro.setForeground(Color.BLACK);
-                    lblApellido2_PantallaRegistro.setForeground(Color.BLACK);
-                    lblFechaNacimiento_PantallaRegistro.setForeground(Color.BLACK);
+                    lblFechaNacimiento_PantallaRegistro.setForeground(Color.RED);
+                }
+                if(Nacionalidad.isEmpty()){
+                    lblNacionalidad_PantallaRegistro.setForeground(Color.RED);
+                }
+                else{
                     lblNacionalidad_PantallaRegistro.setForeground(Color.BLACK);
-                    lblCorreoElectronico_PantallaRegistro.setForeground(Color.BLACK);
-                    lblDNI_PantallaRegistro.setForeground(Color.BLACK);
-                    lblContraseña1_PantallaRegistro.setForeground(Color.BLACK);
-                    lblContraseña2_PantallaRegistro.setForeground(Color.BLACK);
+                }
+                if(CorreoElectronico.isEmpty()){
+                    lblCorreoElectronico_PantallaRegistro.setForeground(Color.RED);
+                }
+                else{
+                    if (isValidEmail(CorreoElectronico)) {
+                        lblCorreoElectronico_PantallaRegistro.setForeground(Color.BLACK);
+                    } else {
+                        lblCorreoElectronico_PantallaRegistro.setForeground(Color.RED);
+                    }
 
-                    if(!Contraseña1.equals(Contraseña2)){
-                        lblContraseñasDistintas.setVisible(true);
-                        lblUsuarioExistente.setVisible(false);
-                        lblUsuarioRegistradoConExito.setVisible(false);
-                        viable = false;
-                    }else{
+                }
+                if(Contraseña1.isEmpty()){
+                    lblContraseña1_PantallaRegistro.setForeground(Color.RED);
+                }
+                else{
+                    lblContraseña1_PantallaRegistro.setForeground(Color.BLACK);
+                }
+                if(Contraseña2.isEmpty()){
+                    lblContraseña2_PantallaRegistro.setForeground(Color.RED);
+                }
+                else{
+                    lblContraseña2_PantallaRegistro.setForeground(Color.BLACK);
+                }
+                if(!Contraseña1.equals(Contraseña2)){
+                    lblContraseña1_PantallaRegistro.setForeground(Color.RED);
+                    lblContraseña2_PantallaRegistro.setForeground(Color.RED);
+                    lblContraseñasDistintas.setVisible(true);
+                    lblUsuarioExistente.setVisible(false);
+                    lblUsuarioRegistradoConExito.setVisible(false);
+                }
+                /* CONDICION DE QUE SI EL CORREO YA ESTAREGISTRADO
+                if(){
+                    lblCorreoElectronico_PantallaRegistro.setForeground(Color.RED);
+                    lblContraseñasDistintas.setVisible(false);
+                    lblUsuarioExistente.setVisible(true);
+                    lblUsuarioRegistradoConExito.setVisible(false);
+                }
+                */
+                if(lblNombre_PantallaRegistro.getForeground()==Color.BLACK && lblApellido1_PantallaRegistro.getForeground()==Color.BLACK && lblApellido2_PantallaRegistro.getForeground()==Color.BLACK && lblFechaNacimiento_PantallaRegistro.getForeground()==Color.BLACK &&
+                        lblNacionalidad_PantallaRegistro.getForeground()==Color.BLACK && lblCorreoElectronico_PantallaRegistro.getForeground()==Color.BLACK && lblContraseña1_PantallaRegistro.getForeground()==Color.BLACK && lblContraseña2_PantallaRegistro.getForeground()==Color.BLACK){
+                    /*
+                    txtNombre_PantallaRegistro.setText("");
+                    txtApellido1_PantallaRegistro.setText("");
+                    txtApellido2_PantallaRegistro.setText("");
+                    txtFechaNacimiento_PantallaRegistro.setText("");
+                    comboBoxNacionalidades_PantallaRegistro.setSelectedItem("");
+                    txtCorreoElectronico_PantallaRegistro.setText("");
+                    txtContraseña1_PantallaRegistro.setText("");
+                    txtContraseña2_PantallaRegistro.setText("");
+                    */
+                    User usuario = new User(Nombre, Apellido1, Apellido2, FechaNacimiento_String, Nacionalidad, CorreoElectronico, Contraseña1);
+                    String context = "/regUser";
+                    Client cliente = new Client();
+                    boolean mensajeRegistro=cliente.sendMessage_User(context, usuario);
+                    System.out.println(mensajeRegistro);
+                    if(mensajeRegistro== true){
                         lblContraseñasDistintas.setVisible(false);
                         lblUsuarioExistente.setVisible(false);
                         lblUsuarioRegistradoConExito.setVisible(true);
-                        viable = true;
                     }
-                    SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy");
-                        try {
-                            fechaNacimiento_PantallaRegistro = formatoFecha.parse(FechaNacimiento);
-                            lblFechaNacimiento_PantallaRegistro.setForeground(Color.BLACK);
-                            viable = true;
-                        } catch (ParseException ex) {
-                            lblFechaNacimiento_PantallaRegistro.setForeground(Color.RED);
-                            viable = false;
-                        }
-                    if (isValidEmail(CorreoElectronico)) {
-                        lblCorreoElectronico_PantallaRegistro.setForeground(Color.BLACK);
-                        viable = true;
-                    } else {
-                        lblCorreoElectronico_PantallaRegistro.setForeground(Color.RED);
-                        viable = false;
+                    else{
+                        lblContraseñasDistintas.setVisible(false);
+                        lblUsuarioExistente.setVisible(true);
+                        lblUsuarioRegistradoConExito.setVisible(false);
                     }
-                    if(viable){
-                        if(!cliente.sendMessage(context, usuario)){
-                            JOptionPane.showMessageDialog(null, "EL CORREO "+usuario.getCorreoelectronico()+" YA ESTÁ REGISTRADO", "Aviso", JOptionPane.WARNING_MESSAGE);
-                        }else{
-                            cliente.sendMessage(context, usuario);
-                        }
-                    }
-
-
                 }
-
             }
         }
     }
-
-
-
-
-
     private class eventoBotonesPanelInicioSesion implements ActionListener{
         @Override
         public void actionPerformed(ActionEvent e) {
+            String CorreoElectronico= txtCorreoElectronico_PantallaInicioSesion.getText().trim();
+            String Contraseña= txtContraseña_PantallaInicioSesion.getText().trim();
             if (e.getSource() == btnVolverPantallaInicio_PantallaInicioSesion) {
                 pnlPantallaInicioSesion.setVisible(false);
                 pnlPantallaInicial.setVisible(true);
@@ -1051,8 +1241,45 @@ public class PanelPrincipal extends JPanel{
             if(e.getSource()== btnIniciarSesion_PantallaInicioSesion){
                 String correo= txtCorreoElectronico_PantallaInicioSesion.getText().trim();
                 String contraseña= txtContraseña_PantallaInicioSesion.getText().trim();
-                pnlPantallaInicioSesion.setVisible(false);
-                pnlOpcionesSesionIniciada.setVisible(true);
+                User usuario = new User(CorreoElectronico, Contraseña);
+                String context = "/logUser";
+                Client cliente = new Client();
+                boolean mensajeLogin=cliente.sendMessage_User(context, usuario);
+                if(mensajeLogin==true){
+                    String context1 = "/getLoggedUser";
+                    Client cliente1 = new Client();
+                    User usuarioIniciado = cliente.buscarUsuarioIniciado(context1, usuario);
+
+                    lblNombreUsuarioIniciado_PantallaOpciones =new JLabel(usuarioIniciado.getNombre()+" "+usuarioIniciado.getApellido1()+" "+usuarioIniciado.getApellido2());
+                    lblNombreUsuarioIniciado_PantallaOpciones.setFont(new Font("Arial",Font.BOLD,30));
+                    lblNombreUsuarioIniciado_PantallaOpciones.setBounds(ancho-950, tamOrig, 25*tamOrig, 4*tamOrig);
+                    pnlOpcionesSesionIniciada.add(lblNombreUsuarioIniciado_PantallaOpciones);
+
+                    if(usuarioIniciado.getPremium()==false){
+                        btnSuscribirse_PantallaOpciones =new JButton("Suscribirse");
+                        btnSuscribirse_PantallaOpciones.setBackground(Color.WHITE);
+                        btnSuscribirse_PantallaOpciones.setFont(new Font("Arial",Font.BOLD,30));
+                        btnSuscribirse_PantallaOpciones.setBounds(25*tamOrig, 25*tamOrig, 25*tamOrig, 5*tamOrig);
+                        btnSuscribirse_PantallaOpciones.addActionListener(new eventoBotonesPanelOpcionesSesionIniciada());
+                        pnlOpcionesSesionIniciada.add(btnSuscribirse_PantallaOpciones);
+                    }
+                    else{
+                        btnCancelarSuscripcion_PantallaOpciones =new JButton("Cancelar suscribcion");
+                        btnCancelarSuscripcion_PantallaOpciones.setBackground(Color.WHITE);
+                        btnCancelarSuscripcion_PantallaOpciones.setFont(new Font("Arial",Font.BOLD,30));
+                        btnCancelarSuscripcion_PantallaOpciones.setBounds(25*tamOrig, 25*tamOrig, 25*tamOrig, 5*tamOrig);
+                        btnCancelarSuscripcion_PantallaOpciones.addActionListener(new eventoBotonesPanelOpcionesSesionIniciada());
+                        pnlOpcionesSesionIniciada.add(btnCancelarSuscripcion_PantallaOpciones);
+                    }
+
+                    pnlPantallaInicioSesion.setVisible(false);
+                    pnlOpcionesSesionIniciada.setVisible(true);
+                    lblLoginFallido_PantallaInicioSesion.setVisible(false);
+
+                }
+                else{
+                    lblLoginFallido_PantallaInicioSesion.setVisible(true);
+                }
             }
         }
     }
@@ -1143,23 +1370,24 @@ public class PanelPrincipal extends JPanel{
         }
     }
 
-    private class eventoBotonesPantallaBilletesInicio implements ActionListener{
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            if (e.getSource() == btnVolverPantallaInicio_PantallaBilletesInicio) {
-                pnlMostrarBilletesInicio.setVisible(false);
-                pnlPantallaInicial.setVisible(true);
-            }
-        }
-    }
-
-    private void updateComboBox(List<String> countries) {
+    private void updateComboBox_Countries(List<String> countries) {
         //comboBoxModel.removeAllElements();
         for (String country : countries) {
             comboBoxModel_PantallaRegistro.addElement(country);
         }
     }
-
+    private void updateComboBoxOrigen_Cities(List<String> cities) {
+        //comboBoxModel.removeAllElements();
+        for (String city : cities) {
+            comboBoxModelOrigen_PantallaInicial.addElement(city);
+        }
+    }
+    private void updateComboBoxDestino_Cities(List<String> cities) {
+        //comboBoxModel.removeAllElements();
+        for (String city : cities) {
+            comboBoxModelDestino_PantallaInicial.addElement(city);
+        }
+    }
     public static boolean esEntero(String str) {
         try {
             Integer.parseInt(str); // Intenta convertir el String a un int
@@ -1168,7 +1396,6 @@ public class PanelPrincipal extends JPanel{
             return false;          // Ocurrió una excepción, así que no es un int
         }
     }
-
     public static boolean isValidEmail(String email) {
         // Expresión regular para validar el formato del correo electrónico
         String emailRegex = "^[\\w-\\.]+@[\\w-]+\\.[a-zA-Z]{2,6}$";
