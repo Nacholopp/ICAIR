@@ -53,6 +53,12 @@ public class Client {
             case "/UsuarioIncorrecto":
                 return false;
 
+            case "/DatosBancariosRegistrados":
+                return true;
+            case "/DatosBancariosNoRegistrados":
+                return false;
+
+
             default:
                 return false;
         }

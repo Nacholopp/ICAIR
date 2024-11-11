@@ -30,6 +30,8 @@ public class PanelPrincipal extends JPanel{
     public static final int ancho=numColumnas*tam;
     public static final int alto=numFilas*tam;
     private Dimension d1=new Dimension(ancho,alto); //ME DECLARO YA UNA DIMENSION PARA QUE TODOS LOS PANELES TENGAN EL MISMO TAMAÑO
+    User usuarioIniciado;
+
 
     List<String>allCountries=List.of("","Alemania", "Austria", "Bélgica", "Bulgaria", "Chipre", "Croacia", "Dinamarca", "Eslovaquia", "Eslovenia", "España", "Estonia", "Finlandia", "Francia", "Grecia",
             "Hungría", "Irlanda", "Italia", "Letonia", "Lituania", "Luxemburgo", "Malta", "Países Bajos", "Polonia", "Portugal", "República Checa", "Rumania", "Suecia");
@@ -42,6 +44,7 @@ public class PanelPrincipal extends JPanel{
     JPanel pnlPantallaBusquedaBilletesSinPremium;
     JPanel pnlPantallaBusquedaBilletesConPremium; //FaltaPorImplementar
     JPanel pnlAñadirDatosBancarios;
+    JPanel pnlDatosBancariosAñadidos;
     JPanel pnlMostrarBilletesSinPremium; //FaltaPorImplementar
     JPanel pnlMostrarBilletesConPremium; //FaltaPorImplementar
 
@@ -102,7 +105,11 @@ public class PanelPrincipal extends JPanel{
     private JTextField txtNumeroTarjeta_PantallaDatosBancarios, txtFechaCaducidad_PantallaDatosBancarios, txtCVC_PantallaDatosBancarios;
     private Date fechaCaducidadtarjeta_PantallaDatosBancarios;
     //endregion
+    //ELEMENTOS PANTALLA DATOS BANCARIOS INGRESADOS
+    //region
 
+
+    //endregion
     class LinePanel extends JPanel {
         @Override
         protected void paintComponent(Graphics g) {
@@ -880,7 +887,28 @@ public class PanelPrincipal extends JPanel{
         //endregion
         pnlAñadirDatosBancarios.setVisible(false);
 
+        //PANTALLA CON DATOS BANCARIOS ACTUALIZADOS
+        //region
+        JLabel lbltarjetaAñadida = new JLabel("TARJETA BANCARIA ACTUALIZADA", JLabel.CENTER);
+        lbltarjetaAñadida.setFont(new Font("Arial",Font.BOLD,30));
+        lbltarjetaAñadida.setBounds(3*tamOrig, 31*tamOrig, 50*tamOrig, 3*tamOrig);
+        lbltarjetaAñadida.setForeground(Color.BLUE);
+        lbltarjetaAñadida.setLocation(250,250);
+        pnlDatosBancariosAñadidos=new JPanel();
+        pnlDatosBancariosAñadidos.setBackground(Color.white);
+        pnlDatosBancariosAñadidos.setPreferredSize(d1);
+        pnlDatosBancariosAñadidos.setLayout(null);
 
+
+
+
+        pnlDatosBancariosAñadidos.add(lbltarjetaAñadida);
+
+
+
+        this.add(pnlDatosBancariosAñadidos);
+        //endregion
+        pnlDatosBancariosAñadidos.setVisible(false);
     }
 
     private class eventoBotonesPanelPrincipal implements ActionListener{
@@ -1248,7 +1276,7 @@ public class PanelPrincipal extends JPanel{
                 if(mensajeLogin==true){
                     String context1 = "/getLoggedUser";
                     Client cliente1 = new Client();
-                    User usuarioIniciado = cliente.buscarUsuarioIniciado(context1, usuario);
+                    usuarioIniciado = cliente.buscarUsuarioIniciado(context1, usuario);
 
                     lblNombreUsuarioIniciado_PantallaOpciones =new JLabel(usuarioIniciado.getNombre()+" "+usuarioIniciado.getApellido1()+" "+usuarioIniciado.getApellido2());
                     lblNombreUsuarioIniciado_PantallaOpciones.setFont(new Font("Arial",Font.BOLD,30));
@@ -1312,10 +1340,13 @@ public class PanelPrincipal extends JPanel{
                 String NumeroTarjeta= txtNumeroTarjeta_PantallaDatosBancarios.getText().trim();
                 String FechaCaducidad= txtFechaCaducidad_PantallaDatosBancarios.getText().trim();
                 String CVC= txtCVC_PantallaDatosBancarios.getText().trim();
+
+
                 if (NumeroTarjeta.length()==19) {
                     if(esEntero(NumeroTarjeta.substring(0,4))== true && esEntero(NumeroTarjeta.substring(5,9))==true && esEntero(NumeroTarjeta.substring(10,14))==true && esEntero(NumeroTarjeta.substring(15,19))==true
                             && NumeroTarjeta.substring(4,5).equals("-") && NumeroTarjeta.substring(9,10).equals("-") && NumeroTarjeta.substring(14,15).equals("-")){
                         lblNumeroTarjeta_PantallaDatosBancarios.setForeground(Color.BLACK);
+                        usuarioIniciado.setNumerotarjeta(NumeroTarjeta);
                     }
                     else{
                         lblNumeroTarjeta_PantallaDatosBancarios.setForeground(Color.RED);
@@ -1331,6 +1362,7 @@ public class PanelPrincipal extends JPanel{
                         try {
                             fechaCaducidadtarjeta_PantallaDatosBancarios = formatoFecha2.parse(FechaCaducidad);
                             lblFechaCaducidad_PantallaDatosBancarios.setForeground(Color.BLACK);
+                            usuarioIniciado.setFechacaducidadtarjeta(FechaCaducidad);
                         } catch (ParseException ex) {
                             lblFechaCaducidad_PantallaDatosBancarios.setForeground(Color.RED);
                         }
@@ -1344,6 +1376,8 @@ public class PanelPrincipal extends JPanel{
                 if(CVC.length()==3){
                     if (esEntero(CVC.substring(0,3))==true) {
                         lblCVC_PantallaDatosBancarios.setForeground(Color.BLACK);
+                        Integer CodCVC = Integer.parseInt(CVC);
+                        usuarioIniciado.setCvc(CodCVC);
                     } else {
                         lblCVC_PantallaDatosBancarios.setForeground(Color.RED);
                     }
@@ -1356,10 +1390,26 @@ public class PanelPrincipal extends JPanel{
                     lblFechaCaducidad_PantallaDatosBancarios.setForeground(Color.BLACK);
                     lblCVC_PantallaDatosBancarios.setForeground(Color.BLACK);
                     lblDatosBancariosRegistradosConExito.setVisible(true);
+                    String contexto =  "/setDatosbancarios";
+                    System.out.println(usuarioIniciado);
+                    Client cliente_iniciado = new Client();
+                    boolean datosActualizados = cliente_iniciado.sendMessage_User(contexto,usuarioIniciado);
+                    if (!datosActualizados) {
+                        JOptionPane.showMessageDialog(null, "No se han podido actualizar los datos bancarios, por favor inténtelo de nuevo");
+                    }
+                    else {
+                        pnlAñadirDatosBancarios.setVisible(false);
+                        pnlDatosBancariosAñadidos.setVisible(true);
+
+                    }
                 }
             }
         }
     }
+
+
+
+
     private class eventoBotonesPanelSesionIniciada implements ActionListener{
         @Override
         public void actionPerformed(ActionEvent e) {

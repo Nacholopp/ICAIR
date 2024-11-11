@@ -133,6 +133,17 @@ public class SocketServer extends Thread {
 
                     objectOutputStream.writeObject(mensajeOut);
                     break;
+
+                case "/setDatosbancarios":
+                    userControler = new UserControler();
+                    boolean usuario_datos_bancarios = userControler.setDatosbancarios(mensajeIn.getUser());
+                    if(usuario_datos_bancarios){
+                        mensajeOut.setContext("/DatosBancariosRegistrados");
+                    }else{
+                        mensajeOut.setContext("/DatosBancariosNoRegistrados");
+                    }
+
+
             }
             try {
                 Thread.sleep(1000); // Pausa de 1 segundo entre iteraciones

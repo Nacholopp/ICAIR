@@ -118,4 +118,38 @@ public class CustomerDAO {
         }
         return null;
     }
+
+    public boolean updateDatosBancarios(User user) {
+        // Consulta UPDATE para modificar los datos bancarios de un usuario existente
+        String query = "UPDATE public.usuarios SET numerotarjeta = ?, fechacaducidadtarjeta = ?, cvc = ? WHERE correoelectronico = ? AND contrasena = ?";
+
+        try (Connection conn = ConnectionDAO.getInstance().getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+
+            // Establecer los valores para los parámetros de la consulta
+            pstmt.setString(1, user.getNumerotarjeta()); // nuevo numerotarjeta
+            pstmt.setString(2, user.getFechacaducidadtarjeta()); // nueva fechacaducidadtarjeta
+            pstmt.setInt(3, user.getCvc()); // nuevo cvc
+            pstmt.setString(4, user.getCorreoelectronico()); // correoelectronico del usuario
+            pstmt.setString(5, user.getContrasena()); // contrasena del usuario
+
+            // Ejecutar la consulta UPDATE
+            int rowsUpdated = pstmt.executeUpdate(); // Esto devuelve el número de filas modificadas
+
+            // Si se actualizó al menos una fila, el usuario existe y se actualizaron sus datos
+            if (rowsUpdated > 0) {
+                System.out.println("Datos bancarios actualizados correctamente.");
+                return true;
+            } else {
+                System.out.println("No se encontró el usuario o no se actualizaron los datos.");
+                return false;
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+
 }
