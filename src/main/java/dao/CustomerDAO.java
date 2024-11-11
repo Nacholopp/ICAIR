@@ -13,10 +13,10 @@ public class CustomerDAO {
     // De aqui hay que cambiar a un usuario que se registre y otro que añada datos bancarios y otro que sea premium
 
     //Register va a tener como entrada un User y la sentencia será user.getNombre()...
-    public boolean register( User user ) {
+    public boolean register(User user) {
         String checkQuery = "SELECT 1 FROM usuarios WHERE correoelectronico = ?";
 
-        String insertQuery =  "INSERT INTO public.usuarios (nombre, apellido1, apellido2, fechanacimiento, nacionalidad, correoelectronico, contrasena, numerotarjeta, fechacaducidadtarjeta, cvc, premium, puntos) VALUES (?,?,?,?,?,?,?,?,?,?,?,?);";
+        String insertQuery = "INSERT INTO public.usuarios (nombre, apellido1, apellido2, fechanacimiento, nacionalidad, correoelectronico, contrasena, numerotarjeta, fechacaducidadtarjeta, cvc, premium, puntos) VALUES (?,?,?,?,?,?,?,?,?,?,?,?);";
 
         try (Connection conn = ConnectionDAO.getInstance().getConnection();
              PreparedStatement checkStmt = conn.prepareStatement(checkQuery);
@@ -51,8 +51,7 @@ public class CustomerDAO {
             if (filasAfectadas > 0) {
                 System.out.println("Usuario registrado exitosamente.");
                 return true;
-            }
-            else {
+            } else {
                 System.out.println("No se pudo registrar el usuario.");
                 return false;
             }
@@ -62,6 +61,7 @@ public class CustomerDAO {
             return false;
         }
     }
+
     public boolean logear(User user) {
         String checkQuery = "SELECT 1 FROM usuarios WHERE correoelectronico = ? AND contrasena = ?";
 
@@ -110,7 +110,7 @@ public class CustomerDAO {
                 int puntos = rs.getInt("puntos");
                 String contrasena = rs.getString("contrasena");
 
-                User usuarioResult = new User(idusuario, nombre, apellido1, apellido2, fechanacimiento, nacionalidad, correoelectronico, numerotarjeta,fechacaducidadtarjeta, cvc, premium, puntos, contrasena);
+                User usuarioResult = new User(idusuario, nombre, apellido1, apellido2, fechanacimiento, nacionalidad, correoelectronico, numerotarjeta, fechacaducidadtarjeta, cvc, premium, puntos, contrasena);
                 return usuarioResult;
             }
         } catch (SQLException e) {
@@ -118,4 +118,74 @@ public class CustomerDAO {
         }
         return null;
     }
+
+    public boolean updateDatosBancarios(User user) {
+        // Consulta UPDATE para modificar los datos bancarios de un usuario existente
+        String query = "UPDATE public.usuarios SET numerotarjeta = ?, fechacaducidadtarjeta = ?, cvc = ? WHERE correoelectronico = ? AND contrasena = ?";
+
+        try (Connection conn = ConnectionDAO.getInstance().getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+
+
+            pstmt.setString(1, user.getNumerotarjeta());
+            pstmt.setString(2, user.getFechacaducidadtarjeta());
+            pstmt.setInt(3, user.getCvc());
+            pstmt.setString(4, user.getCorreoelectronico());
+            pstmt.setString(5, user.getContrasena());
+
+            // Ejecutar la consulta UPDATE
+            int rowsUpdated = pstmt.executeUpdate(); // Esto devuelve el número de filas modificadas
+
+            if (rowsUpdated > 0) {
+                System.out.println("Datos bancarios actualizados correctamente.");
+                return true;
+            } else {
+                System.out.println("No se encontró el usuario o no se actualizaron los datos.");
+                return false;
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean setUserPremium(User user) {
+        String query = "UPDATE public.usuarios SET premium = ? WHERE correoelectronico = ? AND contrasena = ?";
+
+        if (user.getNumerotarjeta() == null || user.getFechacaducidadtarjeta() == null || user.getCvc() == null) {
+            return false;
+        }
+        try (Connection conn = ConnectionDAO.getInstance().getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+
+
+            pstmt.setBoolean(1, user.getPremium());
+            pstmt.setString(2, user.getCorreoelectronico());
+            pstmt.setString(3, user.getContrasena());
+            // Ejecutar la consulta UPDATE
+            int rowsUpdated = pstmt.executeUpdate(); // Esto devuelve el número de filas modificadas
+
+            if (rowsUpdated > 0) {
+                System.out.println("Datos bancarios actualizados correctamente.");
+                return true;
+            } else {
+                System.out.println("No se encontró el usuario o no se actualizaron los datos.");
+                return false;
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }
+
+
+
+
+
+
+
+
+

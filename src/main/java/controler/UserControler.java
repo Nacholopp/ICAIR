@@ -19,4 +19,15 @@ public class UserControler {
     public User buscarUsuarioLogeado(User usuario){
         return customerDAO.buscarUsuarioLogeado(usuario);
     }
+
+    public boolean setDatosbancarios(User usuario){
+        return customerDAO.updateDatosBancarios(usuario);
+    }
+
+    public boolean setPremium(User usuario){
+        return customerDAO.setUserPremium(usuario);
+    }
+
+
+
 }
