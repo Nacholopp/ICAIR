@@ -635,7 +635,20 @@ public class PanelPrincipal extends JPanel{
         btnAñadirDatosBancarios_PantallaOpciones.addActionListener(new eventoBotonesPanelOpcionesSesionIniciada());
         pnlOpcionesSesionIniciada.add(btnAñadirDatosBancarios_PantallaOpciones);
 
+        //Añadir aqui bototnes suscribir y cancelar sub
+        btnSuscribirse_PantallaOpciones =new JButton("Suscribirse");
+        btnSuscribirse_PantallaOpciones.setBackground(Color.WHITE);
+        btnSuscribirse_PantallaOpciones.setFont(new Font("Arial",Font.BOLD,30));
+        btnSuscribirse_PantallaOpciones.setBounds(25*tamOrig, 25*tamOrig, 25*tamOrig, 5*tamOrig);
+        btnSuscribirse_PantallaOpciones.addActionListener(new eventoBotonesPanelOpcionesSesionIniciada());
+        pnlOpcionesSesionIniciada.add(btnSuscribirse_PantallaOpciones);
 
+        btnCancelarSuscripcion_PantallaOpciones =new JButton("Cancelar suscribcion");
+        btnCancelarSuscripcion_PantallaOpciones.setBackground(Color.WHITE);
+        btnCancelarSuscripcion_PantallaOpciones.setFont(new Font("Arial",Font.BOLD,30));
+        btnCancelarSuscripcion_PantallaOpciones.setBounds(25*tamOrig, 31*tamOrig, 25*tamOrig, 5*tamOrig);
+        btnCancelarSuscripcion_PantallaOpciones.addActionListener(new eventoBotonesPanelOpcionesSesionIniciada());
+        pnlOpcionesSesionIniciada.add(btnCancelarSuscripcion_PantallaOpciones);
 
         this.add(pnlOpcionesSesionIniciada);
         //endregion
@@ -1283,23 +1296,22 @@ public class PanelPrincipal extends JPanel{
                     lblNombreUsuarioIniciado_PantallaOpciones.setBounds(ancho-950, tamOrig, 25*tamOrig, 4*tamOrig);
                     pnlOpcionesSesionIniciada.add(lblNombreUsuarioIniciado_PantallaOpciones);
 
+
+                    /*
+
+
                     if(usuarioIniciado.getPremium()==false){
-                        btnSuscribirse_PantallaOpciones =new JButton("Suscribirse");
-                        btnSuscribirse_PantallaOpciones.setBackground(Color.WHITE);
-                        btnSuscribirse_PantallaOpciones.setFont(new Font("Arial",Font.BOLD,30));
-                        btnSuscribirse_PantallaOpciones.setBounds(25*tamOrig, 25*tamOrig, 25*tamOrig, 5*tamOrig);
-                        btnSuscribirse_PantallaOpciones.addActionListener(new eventoBotonesPanelOpcionesSesionIniciada());
-                        pnlOpcionesSesionIniciada.add(btnSuscribirse_PantallaOpciones);
+
+                        btnCancelarSuscripcion_PantallaOpciones.setVisible(false);
+                        btnSuscribirse_PantallaOpciones.setVisible(true);
                     }
                     else{
-                        btnCancelarSuscripcion_PantallaOpciones =new JButton("Cancelar suscribcion");
-                        btnCancelarSuscripcion_PantallaOpciones.setBackground(Color.WHITE);
-                        btnCancelarSuscripcion_PantallaOpciones.setFont(new Font("Arial",Font.BOLD,30));
-                        btnCancelarSuscripcion_PantallaOpciones.setBounds(25*tamOrig, 25*tamOrig, 25*tamOrig, 5*tamOrig);
-                        btnCancelarSuscripcion_PantallaOpciones.addActionListener(new eventoBotonesPanelOpcionesSesionIniciada());
-                        pnlOpcionesSesionIniciada.add(btnCancelarSuscripcion_PantallaOpciones);
+
+                        btnCancelarSuscripcion_PantallaOpciones.setVisible(true);
+                        btnSuscribirse_PantallaOpciones.setVisible(false);
                     }
 
+                    */
                     pnlPantallaInicioSesion.setVisible(false);
                     pnlOpcionesSesionIniciada.setVisible(true);
                     lblLoginFallido_PantallaInicioSesion.setVisible(false);
@@ -1325,6 +1337,14 @@ public class PanelPrincipal extends JPanel{
             if (e.getSource() == btnAñadirDatosBancarios_PantallaOpciones){
                 pnlOpcionesSesionIniciada.setVisible(false);
                 pnlAñadirDatosBancarios.setVisible(true);
+            }
+            if(e.getSource()==btnSuscribirse_PantallaOpciones){
+                //Cambie la base de datos
+                //Despues cambio lo del boton
+            }
+            if(e.getSource()==btnCancelarSuscripcion_PantallaOpciones){
+                //Cambiar base da datos
+                //Para subscribirse compprobar datos bancarios.
             }
         }
     }
@@ -1386,9 +1406,7 @@ public class PanelPrincipal extends JPanel{
                     lblCVC_PantallaDatosBancarios.setForeground(Color.RED);
                 }
                 if(lblNumeroTarjeta_PantallaDatosBancarios.getForeground()==Color.BLACK && lblFechaCaducidad_PantallaDatosBancarios.getForeground()==Color.BLACK && lblCVC_PantallaDatosBancarios.getForeground()==Color.BLACK) {
-                    lblNumeroTarjeta_PantallaDatosBancarios.setForeground(Color.BLACK);
-                    lblFechaCaducidad_PantallaDatosBancarios.setForeground(Color.BLACK);
-                    lblCVC_PantallaDatosBancarios.setForeground(Color.BLACK);
+
                     lblDatosBancariosRegistradosConExito.setVisible(true);
                     String contexto =  "/setDatosbancarios";
                     System.out.println(usuarioIniciado);

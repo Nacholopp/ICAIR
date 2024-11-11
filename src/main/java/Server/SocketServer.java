@@ -142,6 +142,8 @@ public class SocketServer extends Thread {
                     }else{
                         mensajeOut.setContext("/DatosBancariosNoRegistrados");
                     }
+                    objectOutputStream.writeObject(mensajeOut);
+                    break;
 
 
             }

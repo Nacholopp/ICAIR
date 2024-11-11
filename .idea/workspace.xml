@@ -4,7 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e426df70-abe8-4cb6-9367-dae538d61216" name="Changes" comment="" />
+    <list default="true" id="e426df70-abe8-4cb6-9367-dae538d61216" name="Changes" comment="Actualizar datos bancarios">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Server/SocketServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Server/SocketServer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ui/PanelPrincipal.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ui/PanelPrincipal.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -13,9 +17,21 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 7
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "Nacholopp"
+  }
 }]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/Nacholopp/ICAIR.git",
+    "accountId": "73e17fb9-1810-46a8-9b47-d65abaa724b7"
+  }
+}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 7
+}</component>
   <component name="ProjectId" id="2oh4Zl13l5xEQzIgf4iRfhBjJXL" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
@@ -24,10 +40,16 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Application.Main.executor": "Run",
+    "Application.SocketServer.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "master",
+    "git-widget-placeholder": "main",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/ICAIR",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
     "vue.rearranger.settings.migration": "true"
   }
@@ -49,7 +71,33 @@
       <option name="presentableId" value="Default" />
       <updated>1731308530564</updated>
       <workItem from="1731308531576" duration="87000" />
+      <workItem from="1731308801560" duration="10618000" />
     </task>
+    <task id="LOCAL-00001" summary="Arreglos de Pedro">
+      <option name="closed" value="true" />
+      <created>1731309022473</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1731309022473</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Arreglos de Pedro">
+      <option name="closed" value="true" />
+      <created>1731309062629</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1731309062629</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Actualizar datos bancarios">
+      <option name="closed" value="true" />
+      <created>1731317522374</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1731317522374</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -65,5 +113,20 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Arreglos de Pedro" />
+    <MESSAGE value="Actualizar datos bancarios" />
+    <option name="LAST_COMMIT_MESSAGE" value="Actualizar datos bancarios" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <breakpoint enabled="true" type="java-exception">
+          <properties class="org.postgresql.util.PSQLException" package="org.postgresql.util" />
+          <option name="timeStamp" value="2" />
+        </breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
