@@ -10,6 +10,9 @@ import java.net.UnknownHostException;
 
 import configuration.PropertiesISW;
 import domain.User;
+import domain.Avion;
+import domain.Billete;
+import java.util.List;
 import message.Message;
 
 
@@ -29,7 +32,7 @@ public class Client {
         this.port = Integer.parseInt(PropertiesISW.getInstance().getProperty("port"));
     }
 
-    public boolean sendMessage(String context, User usuario) { // Esta función es para Registrar y Logear usuarios, debería de haber otra que devuelva la lista de los vuelos
+    public boolean sendMessage_User(String context, User usuario) { // Esta función es para Registrar y Logear usuarios, debería de haber otra que devuelva la lista de los vuelos
 
         Message mensajeEnvio = new Message();
         Message mensajeVuelta = new Message();
@@ -46,16 +49,170 @@ public class Client {
             case "/UsuarioNoRegistrado":
                 return false;
 
-            case "/UsuarioLogeado":
+            case "/UsuarioCorrecto":
                 return true;
+            case "/UsuarioIncorrecto":
+                return false;
+
+            case "/DatosBancariosRegistrados":
+                return true;
+            case "/DatosBancariosNoRegistrados":
+                return false;
+
+            case "/PremiumCorrecto":
+                return true;
+            case "/PremiumNoCorrecto":
+                return false;
 
             default:
                 return false;
-
         }
-
     }
 
+    public boolean sendMessage_Avion(String context, Avion avion) { // Esta función es para Registrar y Logear usuarios, debería de haber otra que devuelva la lista de los vuelos
+
+        Message mensajeEnvio = new Message();
+        Message mensajeVuelta = new Message();
+        mensajeEnvio.setContext(context);
+        mensajeEnvio.setAvion(avion);
+
+        this.sent(mensajeEnvio, mensajeVuelta);
+        //Ahora en mensajeVuelta ya tenemos el contexto de vuelta del socket server que utilizamos
+
+        switch(mensajeVuelta.getContext()){
+            // Para registrar el contexto a enviar tiene que ser /regUser
+            case "/AvionEncontrado":
+                return true;
+            case "/AvionNoEncontrado":
+                return false;
+
+            default:
+                return false;
+        }
+    }
+
+    public boolean sendMessage_Billete(String context, Billete billete) { // Esta función es para Registrar y Logear usuarios, debería de haber otra que devuelva la lista de los vuelos
+
+        Message mensajeEnvio = new Message();
+        Message mensajeVuelta = new Message();
+        mensajeEnvio.setContext(context);
+        mensajeEnvio.setBillete(billete);
+
+        this.sent(mensajeEnvio, mensajeVuelta);
+        //Ahora en mensajeVuelta ya tenemos el contexto de vuelta del socket server que utilizamos
+
+        switch(mensajeVuelta.getContext()){
+            // Para registrar el contexto a enviar tiene que ser /regUser
+            case "/BilleteComprado":
+                return true;
+            case "/BilleteNoComprado":
+                return false;
+
+            default:
+                return false;
+        }
+    }
+
+    public boolean sendMessage_AvionID(String context, Avion avion) { // Esta función es para Registrar y Logear usuarios, debería de haber otra que devuelva la lista de los vuelos
+
+        Message mensajeEnvio = new Message();
+        Message mensajeVuelta = new Message();
+        mensajeEnvio.setContext(context);
+        mensajeEnvio.setAvion(avion);
+
+        this.sent(mensajeEnvio, mensajeVuelta);
+        //Ahora en mensajeVuelta ya tenemos el contexto de vuelta del socket server que utilizamos
+
+        switch(mensajeVuelta.getContext()){
+            // Para registrar el contexto a enviar tiene que ser /regUser
+            case "/AvionEncontradoID":
+                return true;
+            case "/AvionNoEncontradoID":
+                return false;
+
+            default:
+                return false;
+        }
+    }
+
+    public List<Avion> buscarVuelos(String context, Avion avion) {
+        List<Avion> listaAviones = null;
+
+        try {
+            Message mensajeEnvio = new Message(context, avion);
+            Message mensajeVuelta = new Message();
+
+            this.sent(mensajeEnvio, mensajeVuelta);
+
+            if (mensajeVuelta.getContext().equals("/ListaAviones")) {
+                listaAviones = mensajeVuelta.getListaAviones();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return listaAviones;
+    }
+    public List<Avion> buscarVuelosID(String context, Avion avion) {
+        List<Avion> listaAvionesID = null;
+
+        try {
+            Message mensajeEnvio = new Message(context, avion);
+            Message mensajeVuelta = new Message();
+
+            this.sent(mensajeEnvio, mensajeVuelta);
+
+            if (mensajeVuelta.getContext().equals("/ListaAvionesID")) {
+                listaAvionesID = mensajeVuelta.getListaAvionesID();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return listaAvionesID;
+    }
+
+    public User buscarUsuarioIniciado(String context, User usuario) {
+        User usuarioIniciado = null;
+
+        try {
+            Message mensajeEnvio = new Message(context, usuario);
+            Message mensajeVuelta = new Message();
+
+            this.sent(mensajeEnvio, mensajeVuelta);
+
+            if (mensajeVuelta.getContext().equals("/UsuarioLogeado")) {
+                usuarioIniciado = mensajeVuelta.getUser();
+                return usuarioIniciado;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public Avion buscarVueloComprado(String context, Avion avion) {
+
+        Avion vueloComprado=null;
+
+        try{
+            Message mensajeEnvio = new Message(context, avion);
+            Message mensajeVuelta = new Message();
+            this.sent(mensajeEnvio, mensajeVuelta);
+
+            if(mensajeVuelta.getContext().equals("/VueloComprado")){
+                vueloComprado=mensajeVuelta.getAvion();
+                return vueloComprado;
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     // Utilizamos esta función para obtener el contexto de vuelta del socket server
     public void sent(Message messageOut, Message messageIn) {
@@ -83,8 +240,21 @@ public class Client {
                 ObjectInputStream objectInputStream = new ObjectInputStream(in);
                 Message msg = (Message) objectInputStream.readObject();
                 messageIn.setContext(msg.getContext());
-                messageIn.setUser(msg.getUser());
-
+                if (msg.getUser() != null) {
+                    messageIn.setUser(msg.getUser());
+                }
+                if (msg.getAvion() != null) {
+                    messageIn.setAvion(msg.getAvion());
+                }
+                if (msg.getBillete() != null) {
+                    messageIn.setBillete(msg.getBillete());
+                }
+                if (msg.getListaAviones() != null && !msg.getListaAviones().isEmpty()) {
+                    messageIn.setListaAviones(msg.getListaAviones());  // Asigna la lista de aviones
+                }
+                if (msg.getListaAvionesID() != null && !msg.getListaAvionesID().isEmpty()) {
+                    messageIn.setListaAvionesID(msg.getListaAvionesID());  // Asigna la lista de aviones
+                }
                 // Entonces ahora nuestro mensaje de vuelta (messageIN (recibido)) tiene un contexto sobre el que trabajamos en sendMessage()
             }catch (UnknownHostException e) {
                 System.err.println("Unknown host: " + host);

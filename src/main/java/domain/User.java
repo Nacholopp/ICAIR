@@ -15,32 +15,27 @@ public class User implements Serializable {
     private String contrasena;
     private String numerotarjeta; // Información sensible
     private String fechacaducidadtarjeta; // Puede ser mejor usar Date
-    private String cvc; // Información sensible
+    private Integer cvc; // Información sensible
     private Boolean premium;
     private Integer puntos;
 
-    // Este constructor no le necesitamos por nunca vamos a necesitar todos estos atributos desde el momento inicial
-    // Constructor de un usuario registrado completo, no lo usamos como tal pero tendremos que tener un usuario al que puedas hacer un setPuntos por ejemplo
-//    public User(String nombre, String apellido1, String apellido2, String fechanacimiento, String nacionalidad, String correoelectronico, String contrasena, String numerotarjeta, String fechacaducidadtarjeta, String cvc, Boolean premium, Integer puntos) {
-//
-//        this.nombre = nombre;
-//        this.apellido1 = apellido1;
-//        this.apellido2 = apellido2;
-//        this.fechanacimiento = fechanacimiento;
-//        this.nacionalidad = nacionalidad;
-//        this.correoelectronico = correoelectronico;
-//        this.contrasena = contrasena;
-//        this.numerotarjeta = numerotarjeta;
-//        this.fechacaducidadtarjeta = fechacaducidadtarjeta;
-//        this.cvc = cvc;
-//        this.premium = premium;
-//        this.puntos = puntos;
-//
-//    }
-
     //Este es el constructor del usuario solo registrado
+    public User(Integer id, String nombre, String apellido1, String apellido2, String fechanacimiento, String nacionalidad, String correoelectronico,String numerotarjeta,String fechacaducidadtarjeta, Integer cvc, Boolean premium, Integer puntos, String contrasena) {
+        this.id=id;
+        this.nombre = nombre;
+        this.apellido1 = apellido1;
+        this.apellido2 = apellido2;
+        this.fechanacimiento = fechanacimiento;
+        this.nacionalidad = nacionalidad;
+        this.correoelectronico = correoelectronico;
+        this.numerotarjeta=numerotarjeta;
+        this.fechacaducidadtarjeta=fechacaducidadtarjeta;
+        this.cvc=cvc;
+        this.premium=premium;
+        this.puntos=puntos;
+        this.contrasena = contrasena;
+    }
     public User(String nombre, String apellido1, String apellido2, String fechanacimiento, String nacionalidad, String correoelectronico, String contrasena) {
-
         this.nombre = nombre;
         this.apellido1 = apellido1;
         this.apellido2 = apellido2;
@@ -48,11 +43,36 @@ public class User implements Serializable {
         this.nacionalidad = nacionalidad;
         this.correoelectronico = correoelectronico;
         this.contrasena = contrasena;
+    }
 
+    public User(String correoelectronico, String contrasena) {
+        this.correoelectronico = correoelectronico;
+        this.contrasena = contrasena;
+    }
 
+    public User(String correoelectronico, String contrasena,String numerotarjeta,String fechacaducidadtarjeta,Integer cvc) {
+        this.correoelectronico = correoelectronico;
+        this.contrasena = contrasena;
+        this.numerotarjeta=numerotarjeta;
+        this.fechacaducidadtarjeta=fechacaducidadtarjeta;
+        this.cvc=cvc;
+    }
+
+    public User(String correoelectronico, String contrasena, Boolean premium) {
+        this.correoelectronico = correoelectronico;
+        this.contrasena = contrasena;
+        this.premium=premium;
     }
 
     // Getters y Setters
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public String getNombre() {
         return nombre;
@@ -126,11 +146,11 @@ public class User implements Serializable {
         this.fechacaducidadtarjeta = fechacaducidadtarjeta;
     }
 
-    public String getCvc() {
+    public Integer getCvc() {
         return cvc;
     }
 
-    public void setCvc(String cvc) {
+    public void setCvc(Integer cvc) {
         this.cvc = cvc;
     }
 
@@ -149,4 +169,24 @@ public class User implements Serializable {
     public void setPuntos(Integer puntos) {
         this.puntos = puntos;
     }
+
+    @Override
+    public String toString() {
+        return "User {" +
+                "id=" + id +
+                ", nombre='" + nombre + '\'' +
+                ", apellido1='" + apellido1 + '\'' +
+                ", apellido2='" + apellido2 + '\'' +
+                ", fechanacimiento='" + fechanacimiento + '\'' +
+                ", nacionalidad='" + nacionalidad + '\'' +
+                ", correoelectronico='" + correoelectronico + '\'' +
+                ", numerotarjeta='" + numerotarjeta + '\'' +
+                ", fechacaducidadtarjeta='" + fechacaducidadtarjeta + '\'' +
+                ", cvc=" + cvc +
+                ", premium=" + premium +
+                ", puntos=" + puntos +
+                ", contrasena='" + contrasena + '\'' +
+                '}';
+    }
+
 }
