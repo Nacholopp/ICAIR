@@ -1,0 +1,40 @@
+pipeline {
+    agent any
+    environment {
+        GITHUB_CREDENTIALS_ID = 'GitHub'
+    }
+    tools {
+        maven 'Maven' // Asegúrate de que este nombre coincida con el configurado en Jenkins
+        jdk 'JDK17' // Asegúrate de que este nombre coincida con el configurado en Jenkins
+    }
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'main', url: 'https://github.com/Colme841/ICAIR.git'
+            }
+        }
+        stage('Build') {
+            steps {
+                sh 'mvn clean compile'
+            }
+        }
+        stage('Test') {
+            steps {
+                sh 'mvn test'
+            }
+        }
+        stage('Package') {
+            steps {
+                sh 'mvn package'
+            }
+        }
+    }
+    post {
+        success {
+            echo 'Pipeline completed successfully.'
+        }
+        failure {
+            echo 'Pipeline failed.'
+        }
+    }
+}
