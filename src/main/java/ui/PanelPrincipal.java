@@ -1601,14 +1601,17 @@ public class PanelPrincipal extends JPanel{
                 Client cliente = new Client();
 
                 List<Billete> billetes = cliente.buscarBilletes(context, billete);
-                List<Avion> vuelos=new ArrayList<>();;
-                for (Billete billetei : billetes) {
-                    Avion avion= new Avion(billetei.getIdvuelo());
-                    String context1 = "/getBoughtFlight";
-                    Client cliente1 = new Client();
-                    Avion vuelo = cliente.buscarVueloComprado(context1, avion);
-                    vuelos.add(vuelo);
+                List<Avion> vuelos=new ArrayList<>();
+                if(billetes !=null){
+                    for (Billete billetei : billetes) {
+                        Avion avion= new Avion(billetei.getIdvuelo());
+                        String context1 = "/getBoughtFlight";
+                        Client cliente1 = new Client();
+                        Avion vuelo = cliente.buscarVueloComprado(context1, avion);
+                        vuelos.add(vuelo);
+                    }
                 }
+
 
                 String[] nombresColumnas_PantallaBilletesInicio = {"ID Vuelo", "Origen", "Destino", "Fecha", "Hora", "Duración", "Asientos"};
                 Object[][] datosVuelo_PantallaBilletesInicio;
