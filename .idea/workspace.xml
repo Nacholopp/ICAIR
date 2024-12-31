@@ -48,7 +48,15 @@
   "keyToString": {
     "Application.Main.executor": "Run",
     "Application.SocketServer.executor": "Run",
+    "Maven.ICAIR [clean].executor": "Run",
+    "Maven.ICAIR [compile].executor": "Run",
+    "Maven.ICAIR [deploy].executor": "Run",
+    "Maven.ICAIR [org.apache.maven.plugins:maven-assembly-plugin:3.7.1:help].executor": "Run",
+    "Maven.ICAIR [org.apache.maven.plugins:maven-assembly-plugin:3.7.1:single].executor": "Run",
+    "Maven.ICAIR [org.apache.maven.plugins:maven-install-plugin:3.1.2:install].executor": "Run",
     "Maven.ICAIR [org.apache.maven.plugins:maven-jar-plugin:3.4.1:jar].executor": "Run",
+    "Maven.ICAIR [package].executor": "Run",
+    "Maven.ICAIR [validate].executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "main",
     "kotlin-language-version-configured": "true",
@@ -80,7 +88,7 @@
       <updated>1735649086275</updated>
       <workItem from="1735649089117" duration="569000" />
       <workItem from="1735655731140" duration="3766000" />
-      <workItem from="1735661386960" duration="310000" />
+      <workItem from="1735661386960" duration="1326000" />
     </task>
     <task id="LOCAL-00001" summary="Mejoras y patron de diseño">
       <option name="closed" value="true" />
@@ -90,7 +98,15 @@
       <option name="project" value="LOCAL" />
       <updated>1735659862857</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Mejoras y patron de diseño">
+      <option name="closed" value="true" />
+      <created>1735661835025</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1735661835025</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
